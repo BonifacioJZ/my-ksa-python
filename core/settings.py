@@ -42,10 +42,12 @@ DJANGO_APPS =[
 LOCAL_APPS=[
     'src.user',
     'src.category',
+    'src.products',
 ]
 THIRTY_PARTY =[
     "crispy_forms",
     "crispy_bootstrap5",
+    "tinymce",
 ]
 
 # Application definition
@@ -139,6 +141,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL="user.UserAccount"
+TINYMCE_JS_URL = os.path.join(STATIC_URL, "tinymce/tinymce.min.js")
 
 
 #Login
