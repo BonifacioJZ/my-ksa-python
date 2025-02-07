@@ -1,0 +1,29 @@
+{% extends '../layout/_layout.html' %}
+
+
+{% block title %}
+    
+    {% if title %}
+        {{title}}
+    {% else %}
+        "App"
+    {% endif %}
+        
+{% endblock title %}
+
+{% block content %}
+<h1>{{title}}</h1>
+    <div class="m-0 row justify-content-start">
+        <div class=" col-auto p-5">
+            <figure>
+                <blockquote class="blockquote">
+                    <h4 class="display-6">{{brand.name}}</h4>
+                </blockquote>                               
+            </figure>
+            <hr/>
+        </div>
+    </div>
+    <br>
+    <a href="{% url 'brand_index' %}" class="btn">Regresar</a>
+{% endblock  %}
+    

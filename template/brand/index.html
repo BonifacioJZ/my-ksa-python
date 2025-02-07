@@ -27,7 +27,7 @@
                 <div class="col-auto text-center">
                     <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example"">
                         <a href="#" class="btn btn-secondary ">Regresar</a>
-                        <a type="button" href="#" class="btn btn-primary">Nueva Categoria</a>
+                        <a type="button" href="{% url 'brand_create' %}" class="btn btn-primary">Nueva Categoria</a>
                     </div>
                 </div>
             </div>
@@ -46,19 +46,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for category in category_list %}
+                        {% for brand in brand_list %}
                         <tr>
                             <th>
                                 {{forloop.counter}}
                             </th>
                             <th>
-                                {{category.name}}
+                                {{brand.name}}
                             </th>
                             <th>
                                 <div class="btn-group btn-group-sm">
-                                    <a href="#" class="btn btn-primary btn-sm">Ver</a>
-                                    <a href="#" class="btn btn-warning">Editar</a>
-                                    <a href="#" class="btn btn-danger btn-sm">Eliminar</a>
+                                    <a href="{% url 'brand_detail' brand.slug %}" class="btn btn-primary btn-sm">Ver</a>
+                                    <a href="{% url 'brand_edit' brand.slug %}" class="btn btn-warning">Editar</a>
+                                    <a href="{% url 'brand_delete' brand.slug %}" class="btn btn-danger btn-sm">Eliminar</a>
                                 </div>
                             </th>
                         </tr>
@@ -68,12 +68,13 @@
             </div>
         </div>
     </div>
+    {% include '../components/_paginator.html' %}
     {% else %}
     <div class="m-0 pt-5 row justify-content-center align-items-center" >
         <div class="col-auto p-5  text-center">
             No hay Marcas registradas
             <hr/>
-            <a class="btn btn-primary btn-sm" href="#" >Registrar Marca</a>
+            <a class="btn btn-primary btn-sm" href="{% url 'brand_create' %}" >Registrar Marca</a>
             
         </div>
     </div>

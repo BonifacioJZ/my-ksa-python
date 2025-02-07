@@ -9,6 +9,7 @@ from django.shortcuts import redirect,render
 
 class CategoryListView(LoginRequiredMixin,ListView):
     template_name="category/index.html"
+    paginate_by=20
     model = CategoryForms.Meta.model
     context_object_name='category_list'
     queryset = CategoryForms.Meta.model.objects.all().order_by('name').values()

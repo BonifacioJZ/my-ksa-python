@@ -27,7 +27,7 @@
                 <div class="col-auto text-center">
                     <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example"">
                         <a href="#" class="btn btn-secondary ">Regresar</a>
-                        <a type="button" href="{% url 'category_store'  %}" class="btn btn-primary">Nueva Categoria</a>
+                        <a type="button" href="#" class="btn btn-primary">Nueva Categoria</a>
                     </div>
                 </div>
             </div>
@@ -39,6 +39,7 @@
                             <th>
                                 #
                             </th>
+                            <th>SKU</th>
                             <th>
                                 Nombre
                             </th>
@@ -52,13 +53,16 @@
                                 {{forloop.counter}}
                             </th>
                             <th>
-                                {{category.name}}
+                                sku
+                            </th>
+                            <th>
+                                {{product.name}}
                             </th>
                             <th>
                                 <div class="btn-group btn-group-sm">
-                                    <a href="{% url 'category_show' category.slug %}" class="btn btn-primary btn-sm">Ver</a>
-                                    <a href="{% url 'category_edit' category.slug %}" class="btn btn-warning">Editar</a>
-                                    <a href="{% url 'category_delete' category.slug %}" class="btn btn-danger btn-sm">Eliminar</a>
+                                    <a href="#" class="btn btn-primary btn-sm">Ver</a>
+                                    <a href="#" class="btn btn-warning">Editar</a>
+                                    <a href="#" class="btn btn-danger btn-sm">Eliminar</a>
                                 </div>
                             </th>
                         </tr>
@@ -72,9 +76,9 @@
     {% else %}
     <div class="m-0 pt-5 row justify-content-center align-items-center" >
         <div class="col-auto p-5  text-center">
-            No hay Categorias registradas
+            No hay Productos registrados
             <hr/>
-            <a class="btn btn-primary btn-sm" href="{% url 'category_store' %}" >Registrar Categoria</a>
+            <a class="btn btn-primary btn-sm" href="#" >Registrar Producto</a>
             
         </div>
     </div>
