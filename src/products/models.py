@@ -9,7 +9,7 @@ from django.db.models.signals import pre_save
 class Brand(models.Model):
     id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
     name = models.CharField(verbose_name="Marca",max_length=250,blank=False,null=False)
-    slug = models.SlugField()
+    slug = models.SlugField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
     
@@ -23,10 +23,10 @@ class Brand(models.Model):
 class Product(models.Model):
     id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
     name = models.CharField(verbose_name="Nombre",max_length=250,blank=False,null=False)
-    description = models.TextField(verbose_name="Descripcion")
-    image = models.ImageField( verbose_name="Foto")
+    description = models.TextField(verbose_name="Descripcion",null=True,blank=True)
+    image = models.ImageField( verbose_name="Foto",null=True,blank=True)
     category = models.ForeignKey(Category,verbose_name="Categoria",related_name="category",on_delete=models.CASCADE)
-    slug = models.SlugField()
+    slug = models.SlugField(null=True,blank=True)
     brand = models.ForeignKey(Brand,verbose_name="Marca",related_name="brand",on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)   
@@ -47,6 +47,7 @@ class Benefit(models.Model):
     stock = models.IntegerField(verbose_name="Stock")
     price = models.DecimalField(verbose_name="Precio",max_digits=10,decimal_places=2,blank=False,null=False)
     product = models.ForeignKey(Product,verbose_name="Productos",related_name="products",on_delete=models.CASCADE)
+    slug = models.SlugField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
         

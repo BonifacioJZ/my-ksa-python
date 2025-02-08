@@ -129,8 +129,8 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'staticfiles/static')
@@ -148,3 +148,14 @@ TINYMCE_JS_URL = os.path.join(STATIC_URL, "tinymce/tinymce.min.js")
 LOGIN_URL = reverse_lazy('login')
 #LOGIN_REDIRECT_URL = reverse_lazy('menu')
 LOGOUT_URL = reverse_lazy('logout')
+
+TINYMCE_DEFAULT_CONFIG = {
+    "height": 300,
+    "width": "100%",
+    "menubar": True,
+    "plugins": "advlist autolink lists link image charmap print preview anchor "
+               "searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount",
+    "toolbar": "undo redo | formatselect | bold italic backcolor | "
+               "alignleft aligncenter alignright alignjustify | "
+               "bullist numlist outdent indent | removeformat | help",
+}

@@ -3,21 +3,38 @@ from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView,CreateView,DetailView,UpdateView,DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import BrandForms
-from .models import Product
+from .forms import BrandForms,ProductForms
 from django.urls import reverse_lazy
 # Create your views here.
 
 #Zona de vistas para Brand
-class BrandListView(LoginRequiredMixin,ListView):
-    template_name="brand/index.html"
-    paginate_by=20
+class BrandListView(LoginRequiredMixin, ListView):
+    """
+    Vista basada en clase para listar las marcas.
+
+    Atributos:
+        template_name (str): Nombre de la plantilla a utilizar para renderizar la vista.
+        paginate_by (int): Número de objetos a mostrar por página.
+        model (Model): Modelo a utilizar para obtener los datos.
+        context_object_name (str): Nombre del contexto que se pasará a la plantilla.
+        queryset (QuerySet): Conjunto de objetos a listar, ordenados por nombre.
+    """
+    template_name = "brand/index.html"
+    paginate_by = 20
     model = BrandForms.Meta.model
-    context_object_name="brand_list"
-    queryset=BrandForms.Meta.model.objects.all().order_by('name')
-    
+    context_object_name = "brand_list"
+    queryset = BrandForms.Meta.model.objects.all().order_by('name')
     
     def get_context_data(self, **kwargs):
+        """
+        Agrega datos adicionales al contexto.
+
+        Args:
+            **kwargs: Argumentos adicionales.
+
+        Returns:
+            dict: Contexto actualizado con datos adicionales.
+        """
         context = super().get_context_data(**kwargs)
         context["title"] = "Marcas"
         return context
@@ -117,8 +134,8 @@ class BrandDeleteView(LoginRequiredMixin,DeleteView):
 class ProductListView(LoginRequiredMixin,ListView):
     template_name="product/index.html"
     paginate_by=20
-    model=Product
-    queryset=Product.objects.all().order_by("name")
+    model=ProductForms.Meta.model
+    queryset=ProductForms.Meta.model.objects.all().select_related("brand").order_by('name')
     context_object_name="products_list"
     
     def get_context_data(self, **kwargs):
@@ -126,4 +143,35 @@ class ProductListView(LoginRequiredMixin,ListView):
         context["title"] = "Productos" 
         return context
     
+class ProductCreateView(LoginRequiredMixin,CreateView):
+    template_name="product/form.html"
+    model=ProductForms.Meta.model
+    form_class=ProductForms
+    queryset=ProductForms.Meta.model.objects.all()
+    success_url=reverse_lazy('product_index')
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Productos"
+        return context
+
+class ProductDetailView(LoginRequiredMixin,DetailView):
+    template_name="product/show.html"
+    model=ProductForms.Meta.model
+    queryset=ProductForms.Meta.model.objects.all()
+    context_object_name="product"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Producto"
+        return context
+    
+    def get(self, request,slug=None, *args, **kwargs):
+        product = self.queryset.filter(slug=slug).select_related("brand").first()
+        if product:
+            context ={
+                'product':product
+            }
+            return render(request,self.template_name,context)
+        messages.error(request,message="No Existe el Producto")
+        return redirect(reverse_lazy("product_index"))

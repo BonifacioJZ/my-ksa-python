@@ -8,7 +8,7 @@ class Category(models.Model):
     id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
     name = models.CharField(verbose_name="Nombre",max_length=150,blank=False,null=False)
     description = models.TextField(verbose_name="Descripcion",null=True, blank=True)
-    slug = models.SlugField()
+    slug = models.SlugField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -18,7 +18,7 @@ class Category(models.Model):
         verbose_name_plural = 'categories'
     
     def __str__(self) -> str:
-        return self.slug
+        return self.name
     
     
 

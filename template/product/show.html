@@ -1,0 +1,50 @@
+{% extends '../layout/_layout.html' %}
+
+
+{% block title %}
+    
+    {% if title %}
+        {{title}}
+    {% else %}
+        "App"
+    {% endif %}
+        
+{% endblock title %}
+
+{% block content %}
+<h1>{{title}}</h1>
+    <div class="m-0 row justify-content-start">
+        <div class=" col-auto p-5">
+            <figure>
+                <blockquote class="blockquote">
+                    <h4 class="display-6">{{product.name}}</h4>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    {{product.brand.name}}
+                </figcaption>                                
+            </figure>
+            
+                
+            <hr/>
+            <div>
+                {% if product.image %}
+                <img src="{{product.image.url}}" class="rounded mx-auto d-block" alt="{{product.name}}" width="200" height="200">
+                {% endif %}
+            </div>
+            <br>
+            <figure class="text-center">
+                <blockquote class="blockquote">
+                    <h4 class="display-6">Descripción</h4>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    {{product.description}}
+                </figcaption>                                
+            </figure>
+            <hr/>
+        </div>
+        
+    </div>
+    <br>
+    <a href="{% url 'product_index' %}" class="btn">Regresar</a>
+{% endblock  %}
+    

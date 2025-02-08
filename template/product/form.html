@@ -1,0 +1,39 @@
+{% extends '../layout/_layout.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    
+    {% if title %}
+        {{title}}
+    {% else %}
+        App
+    {% endif %}
+        
+{% endblock title %}
+
+
+{% block content %}
+{% if messages %}
+<div class="m-0 row justify-content-center align-items-center">
+    <div class="col-auto p-1 text-center">
+        {% include '../components/_alert.html' %}
+    </div>
+</div>
+{% endif %}
+<h1>{{title}}</h1>
+<br>
+<div class="row">
+    <div class="col-md-4">
+        <form action="." method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <br>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary">
+                <a href="{% url 'product_index'%}" class="btn">Regresar</a>
+            </div>
+        </form>
+    </div>
+</div>   
+{% endblock  %}
+    
