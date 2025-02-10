@@ -9,9 +9,13 @@
     {% endif %}
         
 {% endblock title %}
+
+{% block header %}
+    {{title}}
+{% endblock header %}
+    
     
 {% block content %}
-    <h1>{{title}}</h1>
     <br>
     {% if messages %}
     <div class="m-0 row justify-content-center align-items-center">
@@ -23,53 +27,37 @@
         
     {% if category_list %}
     <div class="row">
-        <div class="p-3 text-center">
-            <div class="row ">
-                <div class="col-auto text-center">
-                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example"">
-                        <a href="#" class="btn btn-secondary ">Regresar</a>
-                        <a type="button" href="{% url 'category_store'  %}" class="btn btn-primary">Nueva Categoria</a>
-                    </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{title}}</h3>
                 </div>
-            </div>
-            <br/>
-            <div class="table-responsive-md">
-                <table class="table">
-                    <thead class="table-light">
-                        <tr>
-                            <th>
-                                #
-                            </th>
-                            <th>
-                                Nombre
-                            </th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for category in category_list %}
-                        <tr>
-                            <th>
-                                {{forloop.counter}}
-                            </th>
-                            <th>
-                                {{category.name}}
-                            </th>
-                            <th>
-                                <div class="btn-group btn-group-sm">
-                                    <a href="{% url 'category_show' category.slug %}" class="btn btn-primary btn-sm">Ver</a>
-                                    <a href="{% url 'category_edit' category.slug %}" class="btn btn-warning">Editar</a>
-                                    <a href="{% url 'category_delete' category.slug %}" class="btn btn-danger btn-sm">Eliminar</a>
-                                </div>
-                            </th>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="card-body">
+                    <table id="example2" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in category_list %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{category.name}}</td>
+                                <td>
+                                    <a class="btn btn-primary btn-sm" href="{% url 'category_edit' category.slug %}" >Editar</a>
+                                    <a class="btn btn-danger btn-sm" href="{% url 'category_delete' category.slug %}" >Eliminar</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    {% include '../components/_paginator.html' %}
     {% else %}
     <div class="m-0 pt-5 row justify-content-center align-items-center" >
         <div class="col-auto p-5  text-center">
