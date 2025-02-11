@@ -20,7 +20,6 @@ class BrandListView(LoginRequiredMixin, ListView):
         queryset (QuerySet): Conjunto de objetos a listar, ordenados por nombre.
     """
     template_name = "brand/index.html"
-    paginate_by = 20
     model = BrandForms.Meta.model
     context_object_name = "brand_list"
     queryset = BrandForms.Meta.model.objects.all().order_by('name')
@@ -133,7 +132,6 @@ class BrandDeleteView(LoginRequiredMixin,DeleteView):
 
 class ProductListView(LoginRequiredMixin,ListView):
     template_name="product/index.html"
-    paginate_by=20
     model=ProductForms.Meta.model
     queryset=ProductForms.Meta.model.objects.all().select_related("brand").order_by('name')
     context_object_name="products_list"

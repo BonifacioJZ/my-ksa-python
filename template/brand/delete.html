@@ -38,7 +38,7 @@
     <form action="." method="post">
         {% csrf_token %}
         <input type="submit" value="Eliminar" class="btn btn-danger">
-        <a href="{url 'brand_index'}" class="btn">Regresar</a>
+        <a href="{% url 'brand_index' %}" class="btn">Regresar</a>
     </form>
 </div>
 {% endblock content %}
