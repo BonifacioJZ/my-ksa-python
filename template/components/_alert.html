@@ -1,8 +1,19 @@
 {% for message in messages  %}
 {% if message.tags == 'success' %}
-<div class="alert alert-dismissible alert-success">
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+<div class="card bg-success">
+    <div class="card-header">
+        <h3 class="card-title">Completado</h3>
+    <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+        </button>
+    </div>
+    <!-- /.card-tools -->
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
         {{message}}
+    </div>
+    <!-- /.card-body -->
 </div>
 {% elif message.tags == 'error' %}
 <div class="alert alert-dismissible alert-danger">
@@ -12,3 +23,4 @@
 {% endif %}
     
 {% endfor %}
+

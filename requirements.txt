@@ -1,6 +1,6 @@
 django ~= 4.2
 Faker
 django-crispy-forms
-crispy-bootstrap5
+crispy-bootstrap4
 django-tinymce
 Pillow

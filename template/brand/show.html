@@ -12,18 +12,45 @@
 {% endblock title %}
 
 {% block content %}
-<h1>{{title}}</h1>
-    <div class="m-0 row justify-content-start">
-        <div class=" col-auto p-5">
-            <figure>
-                <blockquote class="blockquote">
-                    <h4 class="display-6">{{brand.name}}</h4>
-                </blockquote>                               
-            </figure>
-            <hr/>
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">{{brand.name}}</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
         </div>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer">
+        <a href="{% url 'brand_index' %}" class="btn btn-primary">Regresar</a>
+      </div>
+      <!-- /.card-footer-->
     </div>
-    <br>
-    <a href="{% url 'brand_index' %}" class="btn">Regresar</a>
+    <!-- /.card -->
+</section>
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Productos</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+      </div>
+      <div class="card-body">
+        tabla de productos
+      </div>
+    </div>
+    <!-- /.card -->
+</section>
 {% endblock  %}
     
