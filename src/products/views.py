@@ -152,6 +152,10 @@ class ProductCreateView(LoginRequiredMixin,CreateView):
         context = super().get_context_data(**kwargs)
         context["title"] = "Productos"
         return context
+    
+    def form_valid(self, form):
+        messages.success(request=self.request,message="El producto se a guardado correctamente")
+        return super().form_valid(form)
 
 class ProductDetailView(LoginRequiredMixin,DetailView):
     template_name="product/show.html"
@@ -161,7 +165,7 @@ class ProductDetailView(LoginRequiredMixin,DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = "Producto"
+        context["title"] = "Productos"
         return context
     
     def get(self, request,slug=None, *args, **kwargs):
@@ -173,3 +177,45 @@ class ProductDetailView(LoginRequiredMixin,DetailView):
             return render(request,self.template_name,context)
         messages.error(request,message="No Existe el Producto")
         return redirect(reverse_lazy("product_index"))
+
+class ProductUpdateView(LoginRequiredMixin,UpdateView):
+    template_name="product/form.html"
+    model=ProductForms.Meta.model
+    queryset=ProductForms.Meta.model.objects.all()
+    form_class=ProductForms
+    success_url=reverse_lazy('product_index')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Productos"
+        return context
+    
+    def form_valid(self, form):
+        messages.success(request=self.request,message="El producto se a actualizado correctamente")
+        return super().form_valid(form)
+    
+class ProductDeleteView(LoginRequiredMixin,DeleteView):
+    template_name="product/delete.html"
+    model=ProductForms.Meta.model
+    queryset=ProductForms.Meta.model.objects.all()
+    success_url=reverse_lazy('product_index')
+    context_object_name="product"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Productos"
+        return context
+    
+    def get(self, request:HttpRequest,slug=None, *args, **kwargs):
+        product = self.model.objects.filter(slug=slug).first()
+        if product :
+            context ={
+                'product':product
+            }
+            return render(request,self.template_name,context)
+        messages.error(request,message="No Existe el Producto")
+        return redirect(reverse_lazy("product_index"))
+    
+    def form_valid(self, form):
+        messages.success(request=self.request,message="El producto se a eliminado correctamente")
+        return super().form_valid(form)

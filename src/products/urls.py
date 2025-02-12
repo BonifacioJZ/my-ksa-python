@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from .views import BrandListView,BrandCreateView,BrandDetailView,BrandUpdateView,BrandDeleteView
-from .views import ProductListView,ProductCreateView,ProductDetailView
+from .views import ProductListView,ProductCreateView,ProductDetailView,ProductUpdateView,ProductDeleteView
 from django.urls import path
 
 urlpatterns = [
@@ -23,6 +23,8 @@ urlpatterns = [
     path('brand/',BrandListView.as_view(),name="brand_index"),
     path('new/',ProductCreateView.as_view(),name="product_store"),
     path('<str:slug>/',ProductDetailView.as_view(),name="product_detail"),
+    path('<str:slug>/edit/',ProductUpdateView.as_view(),name="product_edit"),
+    path('<str:slug>/delete/',ProductDeleteView.as_view(),name="product_delete"),
     path('brand/new/',BrandCreateView.as_view(),name="brand_store"),
     path('brand/<str:slug>/',BrandDetailView.as_view(),name="brand_detail"),
     path('brand/<str:slug>/edit/',BrandUpdateView.as_view(),name="brand_edit"),

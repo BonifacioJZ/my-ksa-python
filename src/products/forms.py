@@ -16,7 +16,7 @@ class BrandForms(forms.ModelForm):
 ##Crear Fourmulario
 class ProductForms(forms.ModelForm):
     name = forms.CharField(max_length=150,required=True,label="Nombre")
-    description = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}),required=False,label="Descripcion")
+    description = forms.CharField(widget=TinyMCE(attrs={'cols': 20, 'rows': 20}),required=False,label="Descripcion")
     new_category = forms.CharField(
         required=False,
         label="Nueva Categoria",

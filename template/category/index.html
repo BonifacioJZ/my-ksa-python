@@ -2,13 +2,6 @@
 {{title}} {% else %} "App" {% endif %} {% endblock title %} {% block header %}
 {{title}} {% endblock header %} {% block content %}
 <br />
-{% if messages %}
-<div class="m-0 row justify-content-center align-items-center">
-  <div class="col-auto p-1 text-center">
-    {% include '../components/_alert.html' %}
-  </div>
-</div>
-{% endif %}
 <div class="row">
   <div class="col-12">
     <div class="card">
@@ -58,6 +51,16 @@
 {% endblock content %} {% block javascript %}
 <script type="text/javascript">
   $(document).ready(function () {
+    
+    {% for message in messages %}
+            Swal.fire({
+                icon: "{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
+                title: "{% if message.tags == 'success' %}¡Éxito!{% elif message.tags == 'error' %}¡Error!{% elif message.tags == 'warning' %}¡Advertencia!{% else %}Información{% endif %}",
+                text: "{{ message }}",
+                confirmButtonText: "Aceptar"
+            });
+        {% endfor %}  
+      
     $("#category").DataTable({
       responsive: true,
       language: {

@@ -28,6 +28,7 @@ class CategoryCreateView(LoginRequiredMixin,CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = "Categorias" 
+        context["action"] = "add"
         return context
     
     def post(self, request: HttpRequest, *args: str, **kwargs) -> HttpResponse:
