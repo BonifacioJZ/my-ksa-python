@@ -56,3 +56,7 @@ class ProductForms(forms.ModelForm):
                 category,created = Category.objects.get_or_create(name=new_category)
                 cleaned_data['category'] = category
             return cleaned_data
+class BenefitForm(forms.ModelForm):
+    class Meta:
+        model = Benefit
+        fields = ("name","product","sku","bar_code","stock","abbreviation","price")

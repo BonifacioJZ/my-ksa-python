@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView,CreateView,DetailView,UpdateView,DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import BrandForms,ProductForms
+from .forms import BrandForms,ProductForms,BenefitForm
 from django.urls import reverse_lazy
 # Create your views here.
 
@@ -218,4 +218,47 @@ class ProductDeleteView(LoginRequiredMixin,DeleteView):
     
     def form_valid(self, form):
         messages.success(request=self.request,message="El producto se a eliminado correctamente")
+        return super().form_valid(form)
+    
+class BenefitListView(LoginRequiredMixin,ListView):
+    template_name="benefit/index.html"
+    model=BenefitForm.Meta.model
+    queryset=BenefitForm.Meta.model.objects.all().order_by('name')
+    context_object_name="benefits_list"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Beneficios" 
+        return context
+
+class BenefitCreateView(LoginRequiredMixin,CreateView):
+    template_name="benefit/form.html"
+    model=BenefitForm.Meta.model
+    form_class=BenefitForm
+    queryset=BenefitForm.Meta.model.objects.all()
+    success_url=reverse_lazy('benefit_index')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Beneficios"
+        return context
+    
+    def form_valid(self, form):
+        messages.success(request=self.request,message="El beneficio se a guardado correctamente")
+        return super().form_valid(form)
+
+class BenefitUpdateView(LoginRequiredMixin,UpdateView):
+    template_name="benefit/form.html"
+    model=BenefitForm.Meta.model
+    queryset=BenefitForm.Meta.model.objects.all()
+    form_class=BenefitForm
+    success_url=reverse_lazy('benefit_index')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Beneficios"
+        return context
+    
+    def form_valid(self, form):
+        messages.success(request=self.request,message="El beneficio se a actualizado correctamente")
         return super().form_valid(form)

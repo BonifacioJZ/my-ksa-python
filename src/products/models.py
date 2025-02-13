@@ -47,6 +47,7 @@ class Benefit(models.Model):
     stock = models.IntegerField(verbose_name="Stock")
     price = models.DecimalField(verbose_name="Precio",max_digits=10,decimal_places=2,blank=False,null=False)
     product = models.ForeignKey(Product,verbose_name="Productos",related_name="products",on_delete=models.CASCADE)
+    abbreviation = models.CharField(verbose_name="Abreviatura",max_length=5,blank=False,null=False)
     slug = models.SlugField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
