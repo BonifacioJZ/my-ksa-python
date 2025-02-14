@@ -169,7 +169,9 @@ class ProductDetailView(LoginRequiredMixin,DetailView):
         return context
     
     def get(self, request,slug=None, *args, **kwargs):
-        product = self.queryset.filter(slug=slug).select_related("brand").first()
+        product = self.queryset.all().prefetch_related().filter(slug=slug).first()
+        print(product)
+        
         if product:
             context ={
                 'product':product
@@ -261,4 +263,30 @@ class BenefitUpdateView(LoginRequiredMixin,UpdateView):
     
     def form_valid(self, form):
         messages.success(request=self.request,message="El beneficio se a actualizado correctamente")
+        return super().form_valid(form)
+
+class BenefitDeleteView(LoginRequiredMixin,DeleteView):
+    template_name="benefit/delete.html"
+    model=BenefitForm.Meta.model
+    queryset=BenefitForm.Meta.model.objects.all()
+    success_url=reverse_lazy('benefit_index')
+    context_object_name="benefit"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Beneficios"
+        return context
+    
+    def get(self, request:HttpRequest,slug=None, *args, **kwargs):
+        benefit = self.model.objects.filter(slug=slug).first()
+        if benefit :
+            context ={
+                'benefit':benefit
+            }
+            return render(request,self.template_name,context)
+        messages.error(request,message="No Existe el Beneficio")
+        return redirect(reverse_lazy("benefit_index"))
+    
+    def form_valid(self, form):
+        messages.success(request=self.request,message="El beneficio se a eliminado correctamente")
         return super().form_valid(form)

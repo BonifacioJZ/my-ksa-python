@@ -36,7 +36,7 @@
                     <td>{{benefit.name}}</td>
                     <td>{{benefit.product.name}}</td>
                     <td>{{benefit.sku}}</td>
-                    <td>{{benefit.price}}</td>
+                    <td>$ {{benefit.price}}</td>
                     <td>
                       <a href="{% url 'product_detail' benefit.product.slug %}" class="btn btn-primary btn-sm">
                           <i class="fa-solid fa-eye"></i>
@@ -48,7 +48,7 @@
                       >
                       <a
                         class="btn btn-danger btn-sm"
-                        href="#"
+                        href="{% url 'benefit_delete' benefit.slug  %}"
                         ><i class="fa-solid fa-trash"></i></a
                       >
                     </td>
