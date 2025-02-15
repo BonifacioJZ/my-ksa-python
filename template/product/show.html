@@ -37,7 +37,17 @@
             <h4 class="mt-3"> <small>Selecione uno</small></h4>
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
               
-              {{product.benefit}}
+              
+              {% for benefit in product.products.all %}
+                <label class="btn btn-default text-center active">
+                  <input type="radio" name="color_option" id="color_option1" autocomplete="off" checked="">
+                  <span class="text-xl">{{benefit.abbreviation}}</span>
+                  <br>
+                  {{benefit.name}}
+                  
+                </label>
+              {% endfor %}
+                
                 
             </div>
 

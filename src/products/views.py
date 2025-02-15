@@ -133,7 +133,7 @@ class BrandDeleteView(LoginRequiredMixin,DeleteView):
 class ProductListView(LoginRequiredMixin,ListView):
     template_name="product/index.html"
     model=ProductForms.Meta.model
-    queryset=ProductForms.Meta.model.objects.all().select_related("brand").order_by('name')
+    queryset=ProductForms.Meta.model.objects.all().select_related().order_by('name')
     context_object_name="products_list"
     
     def get_context_data(self, **kwargs):
@@ -169,9 +169,8 @@ class ProductDetailView(LoginRequiredMixin,DetailView):
         return context
     
     def get(self, request,slug=None, *args, **kwargs):
-        product = self.queryset.all().prefetch_related().filter(slug=slug).first()
-        print(product)
-        
+        product = self.queryset.select_related().all().filter(slug=slug).first()
+
         if product:
             context ={
                 'product':product
