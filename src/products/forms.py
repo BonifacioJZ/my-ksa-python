@@ -16,19 +16,19 @@ class BrandForms(forms.ModelForm):
 ##Crear Fourmulario
 class ProductForms(forms.ModelForm):
     name = forms.CharField(max_length=150,required=True,label="Nombre")
-    description = forms.CharField(widget=TinyMCE(attrs={'cols': 20, 'rows': 20}),required=False,label="Descripcion")
+    description = forms.CharField(widget=TinyMCE(attrs={'cols': 10, 'rows': 30}),required=False,label="Descripcion")
     new_category = forms.CharField(
         required=False,
         label="Nueva Categoria",
         help_text="Si no encuentra la categoria que busca, por favor ingrese una nueva"
     )
-    image = forms.ImageField(required=False,label="Foto")
+    image = forms.ImageField(required=True,label="Foto")
     
     class Meta:
         model = Product
         fields = ["name","brand","category","image","description"]
         widgets = {
-            "description": TinyMCE(attrs={"cols": 80, "rows": 20}),
+            'description': TinyMCE(attrs={'cols': 10, 'rows': 30})
         }
         
     def __init__(self,*args, **kwargs):
