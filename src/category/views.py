@@ -54,7 +54,7 @@ class CategoryDetailView(LoginRequiredMixin,DetailView):
         return context
     
     def get(self, request: HttpRequest, slug=None,*args, **kwargs) -> HttpResponse:
-        category = CategoryForms.Meta.model.objects.filter(slug=slug).first()
+        category = self.queryset.select_related().all().filter(slug=slug).first()
         if category:
             context = {
                 'category':category

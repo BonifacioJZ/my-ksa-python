@@ -73,7 +73,7 @@ class BrandDetailView(LoginRequiredMixin,DetailView):
         context["title"] = "Marca" 
         return context
     def get(self, request,slug=None, *args, **kwargs):
-        brand = self.queryset.filter(slug=slug).first()
+        brand = self.queryset.select_related().all().filter(slug=slug).first()
         if brand:
             context ={
                 'brand':brand
@@ -168,12 +168,18 @@ class ProductDetailView(LoginRequiredMixin,DetailView):
         context["title"] = "Productos"
         return context
     
-    def get(self, request,slug=None, *args, **kwargs):
+    def get(self, request:HttpRequest,slug=None, *args, **kwargs):
         product = self.queryset.select_related().all().filter(slug=slug).first()
-
         if product:
+            slug_benefit = request.GET.get('benefit')
+            
+            if slug_benefit:
+                benefit = product.products.all().filter(slug=slug_benefit).first()
+            else:
+                benefit=product.products.all().first()
             context ={
-                'product':product
+                'product':product,
+                'benefit':benefit,
             }
             return render(request,self.template_name,context)
         messages.error(request,message="No Existe el Producto")

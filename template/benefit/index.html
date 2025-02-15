@@ -38,7 +38,7 @@
                     <td>{{benefit.sku}}</td>
                     <td>$ {{benefit.price}}</td>
                     <td>
-                      <a href="{% url 'product_detail' benefit.product.slug %}" class="btn btn-primary btn-sm">
+                      <a href="{% url 'product_detail' benefit.product.slug %}?benefit={{benefit.slug}}" class="btn btn-primary btn-sm">
                           <i class="fa-solid fa-eye"></i>
                       </a>
                       <a

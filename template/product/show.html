@@ -38,14 +38,30 @@
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
               
               
-              {% for benefit in product.products.all %}
-                <label class="btn btn-default text-center active">
-                  <input type="radio" name="color_option" id="color_option1" autocomplete="off" checked="">
-                  <span class="text-xl">{{benefit.abbreviation}}</span>
-                  <br>
-                  {{benefit.name}}
-                  
-                </label>
+              {% for b in product.products.all %}
+                
+                {% if b.slug == benefit.slug %}
+                  <label class="btn btn-success disabled text-center active">
+                    <input type="radio" name="color_option" id="color_option1" autocomplete="off" checked="">
+                    <span class="text-xl">{{b.abbreviation}}</span>
+                    <br>
+                    {{b.name}}
+                  </label>
+                {% elif b.stock == 0 %}
+                  <label class="btn btn-default disabled text-center active">
+                    <input type="radio" name="color_option" id="color_option1" autocomplete="off" checked="">
+                    <span class="text-xl">{{b.abbreviation}}</span>
+                    <br>
+                    {{b.name}}
+                  </label>
+                {% else %}
+                  <a href="?benefit={{b.slug}}" class="btn btn-default text-center active">
+                    <span class="text-xl">{{b.abbreviation}}</span>
+                    <br>
+                    {{b.name}}
+                  </a>
+                {% endif %}
+                
               {% endfor %}
                 
                 
@@ -53,39 +69,28 @@
 
             <div class="bg-gray py-2 px-3 mt-4">
               <h2 class="mb-0">
-                $80.00
+                $ {{benefit.price}}
               </h2>
               <h4 class="mt-0">
-                <small>Ex Tax: $80.00 </small>
+                <small>{{benefit.abbreviation}} {{benefit.name}} </small>
               </h4>
             </div>
-
+            
+            {% if benefit.stock > 0 %}
             <div class="mt-4">
               <div class="btn btn-primary btn-lg btn-flat">
                 <i class="fas fa-cart-plus fa-lg mr-2"></i>
                 Add to Cart
               </div>
-
-              <div class="btn btn-default btn-lg btn-flat">
-                <i class="fas fa-heart fa-lg mr-2"></i>
-                Add to Wishlist
+            {% else %}
+              <div class="mt-4">
+                <div class="btn btn-default disabled btn-lg btn-flat">
+                  <i class="fas fa-cart-plus fa-lg mr-2"></i>
+                  Agotado
+                </div>
               </div>
-            </div>
-
-            <div class="mt-4 product-share">
-              <a href="#" class="text-gray">
-                <i class="fab fa-facebook-square fa-2x"></i>
-              </a>
-              <a href="#" class="text-gray">
-                <i class="fab fa-twitter-square fa-2x"></i>
-              </a>
-              <a href="#" class="text-gray">
-                <i class="fas fa-envelope-square fa-2x"></i>
-              </a>
-              <a href="#" class="text-gray">
-                <i class="fas fa-rss-square fa-2x"></i>
-              </a>
-            </div>
+            {% endif %}
+              
 
           </div>
         </div>
