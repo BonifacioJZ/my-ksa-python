@@ -14,18 +14,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path,include
-from django.conf import settings
-from django.conf.urls.static import static
-from src.products.urls import urlpatterns_benefit as benefit_urls
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('authentication/',include('src.user.urls')),
-    path('category/',include('src.category.urls')),
-    path('product/',include('src.products.urls')),
-    path('tinymce/', include('tinymce.urls')),
-    path('products/benefit/',include(benefit_urls)),
-    path('supplier/',include('src.suppliers.urls')),
+from .views import SupplierListView,SupplierCreateView,SupplierDetailView,SupplierUpdateView,SupplierDeleteView
+from django.urls import path
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns = [
+    path('',SupplierListView.as_view(),name="supplier_index" ),
+    path('new/',SupplierCreateView.as_view(),name="supplier_store" ),
+    path('<str:slug>/',SupplierDetailView.as_view(),name="supplier_detail" ),
+    path('<str:slug>/edit/',SupplierUpdateView.as_view(),name="supplier_edit" ),
+    path('<str:slug>/delete/',SupplierDeleteView.as_view(),name="supplier_delete" ),
+]
