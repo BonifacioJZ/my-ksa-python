@@ -44,6 +44,7 @@ LOCAL_APPS=[
     'src.category',
     'src.products',
     'src.suppliers',
+    'src.clients',
 ]
 THIRTY_PARTY =[
     "crispy_forms",
