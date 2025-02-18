@@ -15,12 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from .views import SupplierListView,SupplierCreateView,SupplierDetailView,SupplierUpdateView,SupplierDeleteView
+from .views import SupplierContactListView,SupplierContactCreateView,SupplierContactUpdateView,SupplierContactDeleteView
 from django.urls import path
 
 urlpatterns = [
     path('',SupplierListView.as_view(),name="supplier_index" ),
+    path('contacts/',SupplierContactListView.as_view(),name="supplier_contact_index" ),
     path('new/',SupplierCreateView.as_view(),name="supplier_store" ),
+    path('new/contact/',SupplierContactCreateView.as_view(),name="supplier_contact_store" ),
     path('<str:slug>/',SupplierDetailView.as_view(),name="supplier_detail" ),
     path('<str:slug>/edit/',SupplierUpdateView.as_view(),name="supplier_edit" ),
+    path('<str:slug>/edit/contact/',SupplierContactUpdateView.as_view(),name="supplier_contact_edit" ),
+    path('<str:slug>/delete/contact/',SupplierContactDeleteView.as_view(),name="supplier_contact_delete" ),
     path('<str:slug>/delete/',SupplierDeleteView.as_view(),name="supplier_delete" ),
 ]
