@@ -1,0 +1,48 @@
+{% extends '../layout/_layout.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    
+    {% if title %}
+        {{title}}
+    {% else %}
+        App
+    {% endif %}
+        
+{% endblock title %}
+
+
+{% block content %}
+{% if messages %}
+<div class="m-0 row justify-content-center align-items-center">
+    <div class="col-auto p-1 text-center">
+        {% include '../components/_alert.html' %}
+    </div>
+</div>
+{% endif %}
+<div class="row">
+    <div class="col-11">
+        <div class="card card-default">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-plus"></i>
+                    {{title}}
+                </div>
+            </div>
+            <div class="card-body">
+                <form id="form" action="." method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="{{action}}">
+                    {{ form|crispy }}
+                    <br>
+                    <div class="form-group">
+                        <input type="submit" value="Guardar" class="btn btn-primary">
+                        <a href="{% url 'client_index'%}" class="btn">Regresar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock  %}

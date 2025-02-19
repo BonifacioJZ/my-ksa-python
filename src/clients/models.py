@@ -9,7 +9,7 @@ class Client(models.Model):
     name = models.CharField(verbose_name="Nombre",max_length=150,blank=False,null=False)
     last_name = models.CharField(verbose_name="Apellido",max_length=150,blank=False,null=False)
     email = models.EmailField(verbose_name="Correo Electronico",max_length=254,blank=True,null=True)
-    phone = models.CharField(verbose_name="Telefono",max_length=10,blank=False,null=False)
+    phone = models.CharField(verbose_name="Telefono",max_length=15,blank=False,null=False)
     address = models.TextField(verbose_name="Direccion",null=True, blank=True)
     slug = models.SlugField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
