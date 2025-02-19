@@ -24,6 +24,7 @@ class SupplierContact(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     supplier = models.ForeignKey(Supplier,verbose_name="Provedor", related_name="suppler", on_delete=models.CASCADE)
     name = models.CharField(max_length=255, verbose_name="Nombre")
+    last_name = models.CharField(max_length=255, verbose_name="Apellido", null=False, blank=False)
     phone = models.CharField(max_length=15,verbose_name="Telefono")
     email = models.EmailField(null=True, blank=True,verbose_name="Correo Electronico")
     whatsapp = models.CharField(max_length=13, null=True, blank=True, verbose_name="Whatsapp")

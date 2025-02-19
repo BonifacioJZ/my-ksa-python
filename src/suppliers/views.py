@@ -322,8 +322,51 @@ class SupplierContactCreateView(LoginRequiredMixin,CreateView):
         messages.error(request=request,message="Error al crear el Contacto")
         return render(request,self.template_name,context)
 
-##TODO Implementar las vistas de detalle de contacto
+class SupplierContactDetailView(LoginRequiredMixin,DetailView):
+    """
+    Vista basada en clase para mostrar los detalles de un contacto de un proveedor.
 
+    Atributos:
+        template_name (str): Nombre de la plantilla a utilizar para renderizar la vista.
+        model (Model): Modelo a utilizar para obtener los datos.
+        context_object_name (str): Nombre del contexto que se pasará a la plantilla.
+        queryset (QuerySet): Conjunto de objetos a listar.
+    """
+    template_name = "supplier_contact/show.html"
+    model = SupplierContactForm.Meta.model
+    context_object_name = 'contact'
+    queryset = SupplierContactForm.Meta.model.objects.all()
+    
+    def get_context_data(self, **kwargs) -> dict[str, any]:
+        """
+        Agrega datos adicionales al contexto.
+
+        Args:
+            **kwargs: Argumentos adicionales.
+
+        Returns:
+            dict: Contexto actualizado con datos adicionales.
+        """
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Contacto" 
+        return context
+    
+    def get(self, request: HttpRequest, slug=None, *args, **kwargs):
+        """
+        Maneja la solicitud GET para mostrar los detalles de un contacto de un proveedor.
+
+        Args:
+            request (HttpRequest): La solicitud HTTP.
+            slug (str): El slug del contacto.
+
+        Returns:
+            HttpResponse: La respuesta HTTP.
+        """
+        contact = self.queryset.select_related().all().filter(slug=slug).first()
+        if contact:
+            return render(request, self.template_name, {'contact': contact})
+        messages.error(request, message="No Existe el Contacto")
+        return redirect(reverse_lazy("supplier_contact_index"))
 class SupplierContactUpdateView(LoginRequiredMixin,UpdateView):
     """
     Vista basada en clase para actualizar un contacto de un proveedor existente.

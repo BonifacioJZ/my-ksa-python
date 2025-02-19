@@ -10,4 +10,4 @@ class SupplierForm(forms.ModelForm):
 class SupplierContactForm(forms.ModelForm):
     class Meta:
         model = SupplierContact
-        fields = ["name","supplier","phone","email","whatsapp"]
+        fields = ["name","last_name","supplier","phone","email","whatsapp"]

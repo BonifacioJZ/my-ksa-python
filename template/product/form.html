@@ -58,6 +58,14 @@
                     confirmButtonText: "Aceptar"
                 });
             {% endfor %}
+            tinymce.init({
+                selector: 'textarea',  // Activa TinyMCE en todos los <textarea>
+                menubar: false,
+                plugins: "advlist autolink lists link image charmap print preview",
+                toolbar: "bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
+                height: 300
+            });
+        
         });
     </script>
 {% endblock  %}
