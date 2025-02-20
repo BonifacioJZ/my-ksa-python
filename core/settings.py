@@ -40,6 +40,7 @@ DJANGO_APPS =[
 ]
 
 LOCAL_APPS=[
+    'src.home',
     'src.user',
     'src.category',
     'src.products',
@@ -148,7 +149,7 @@ TINYMCE_JS_URL = os.path.join(STATIC_URL, "tinymce/tinymce.min.js")
 
 #Login
 LOGIN_URL = reverse_lazy('login')
-#LOGIN_REDIRECT_URL = reverse_lazy('menu')
+LOGIN_REDIRECT_URL = reverse_lazy('index')
 LOGOUT_URL = reverse_lazy('logout')
 
 TINYMCE_DEFAULT_CONFIG = {

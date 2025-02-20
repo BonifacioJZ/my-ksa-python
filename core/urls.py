@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from src.products.urls import urlpatterns_benefit as benefit_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',include('src.home.urls')),
     path('authentication/',include('src.user.urls')),
     path('category/',include('src.category.urls')),
     path('product/',include('src.products.urls')),
