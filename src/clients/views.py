@@ -78,3 +78,50 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context["title"] = "Crear Cliente"
         return context
+
+class ClientDetailView(LoginRequiredMixin,DetailView):
+    template_name = "clients/show.html"
+    model = ClientForms.Meta.model
+    context_object_name="client"
+    
+    def get_context_data(self, **kwargs) -> dict[str, any]:
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'cliente'
+        return context
+    
+    
+    def get(self, request,slug=None, *args, **kwargs):
+        client = self.model.objects.select_related().all().filter(slug=slug).first()
+        if client:
+            context = {
+                'client':client
+            }
+            return render(request,self.template_name,context)
+        messages.error(request,"No existe el cliente buscado")
+        return redirect(reverse_lazy('client_index'))
+
+class ClientUpdateView(LoginRequiredMixin,UpdateView):
+    template_name="clients/form.html"
+    model=ClientForms.Meta.model
+    form_class=ClientForms
+    success_url=reverse_lazy('client_index')
+    
+    def form_valid(self, form):
+        messages.success(self.request,message="El Ciente fue actualizada exitosamente")
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request,message="Error al Actualizar")
+        response = super().form_invalid(form)
+        return response
+
+class  ClientDeleteView(LoginRequiredMixin,DeleteView):
+    template_name="clients/delete.html"
+    model = ClientForms.Meta.model
+    success_url=reverse_lazy('client_index')
+    
+    def form_valid(self, form):
+        messages.success(self.request,message="El Ciente fue eliminado exitosamente")
+        return super().form_valid(form)
+    
+

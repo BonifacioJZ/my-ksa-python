@@ -36,17 +36,17 @@
                     <td>{{client.last_name}}</td>
                     <td>{{client.phone}}</td>
                     <td>
-                      <a href="#" class="btn btn-primary btn-sm">
+                      <a href="{% url 'client_detail' client.slug %}" class="btn btn-primary btn-sm">
                           <i class="fa-solid fa-eye"></i>
                       </a>
                       <a
                         class="btn btn-warning btn-sm"
-                        href="#"
+                        href="{% url 'client_edit' client.slug %}"
                         ><i class="fa-solid fa-pen-to-square"></i></a
                       >
                       <a
                         class="btn btn-danger btn-sm"
-                        href="#"
+                        href="{% url 'client_delete' client.slug %}"
                         ><i class="fa-solid fa-trash"></i></a
                       >
                     </td>
