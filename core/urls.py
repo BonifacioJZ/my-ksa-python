@@ -29,5 +29,6 @@ urlpatterns = [
     path('products/benefit/',include(benefit_urls)),
     path('supplier/',include('src.suppliers.urls')),
     path('clients/',include('src.clients.urls')),
+    path('sales/',include('src.sales.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
