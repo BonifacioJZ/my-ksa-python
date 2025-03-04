@@ -125,3 +125,14 @@ class  ClientDeleteView(LoginRequiredMixin,DeleteView):
         return super().form_valid(form)
     
 
+class ClientCreateViewEmergent(LoginRequiredMixin,CreateView):
+    template_name="clients/form.html"
+    form_class=ClientForms
+    model = ClientForms.Meta.model
+    
+    def post(self, request, *args, **kwargs):
+        client = ClientForms(request.POST)
+        if client.is_valid():
+            client.save()
+            return render(request,'components/_close_windows.html')
+        return super().post(request, *args, **kwargs)

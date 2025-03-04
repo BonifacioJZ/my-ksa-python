@@ -21,7 +21,7 @@ class Client(models.Model):
         verbose_name_plural = 'clients'
     
     def __str__(self) -> str:
-        return self.name
+        return f"{self.name} {self.last_name} {self.slug}"
     
 
 def create_client_slug(sender,instance:Client,*args, **kwargs):
