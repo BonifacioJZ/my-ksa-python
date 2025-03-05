@@ -126,7 +126,7 @@ class  ClientDeleteView(LoginRequiredMixin,DeleteView):
     
 
 class ClientCreateViewEmergent(LoginRequiredMixin,CreateView):
-    template_name="clients/form.html"
+    template_name="clients/emergent.html"
     form_class=ClientForms
     model = ClientForms.Meta.model
     

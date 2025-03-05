@@ -4,7 +4,7 @@ from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from .forms import SaleForm
+from .forms import SaleForm,SearchProductForm
 # Create your views here.
 
 class SalesCreateView(LoginRequiredMixin,CreateView):
@@ -16,5 +16,6 @@ class SalesCreateView(LoginRequiredMixin,CreateView):
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
         context["title"] = "Ventas"
+        context["search"] = SearchProductForm()
         return context
     

@@ -63,15 +63,15 @@
                                 Productos
                             </div>
                             <div class="card-body">
-                                <div class="form-group">
-                                    <label >Buscador de Productos</label>
-                                    <div class="input-group">
-                                        <input type="text" placeholder="Ponga el Nombre o la Clave del producto" class="form-control">
-                                        <span class="input-group-append">
-                                            <button type="button" class="btn btn-danger btn-flat"><i class="fa-solid fa-xmark"></i></button>
-                                        </span>
+                                    <div class="form-group">
+                                        <label >Buscador de Productos</label>
+                                        <div class="input-group">
+                                                {{ search.query}}
+                                                <span class="input-group-append">
+                                                    <button type="button" onclick="findProduct()" class="btn btn-primary btn-flat"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                                </span>
+                                        </div>
                                     </div>
-                                </div>
                                 <table id="detail" class="table table-striped table-bordered">
                                     <thead>
                                       <tr>
@@ -139,6 +139,20 @@
             let newWindow = window.open(
                 "{% url 'client_store_emergent' %}",
                 "NuevaVentanaCliente",
+                "width=600,height=400,left=200,top=200"
+            );
+            let timer = setInterval(function () {
+                if (newWindow.closed) {
+                    clearInterval(timer);
+                    location.reload();
+                }
+            }, 500);
+        }
+        function findProduct(){
+            let query = document.getElementById("id_query").value
+            let newWindow = window.open(
+                "{% url 'client_store_emergent' %}"+"?query="+query,
+                "findProduct",
                 "width=600,height=400,left=200,top=200"
             );
             let timer = setInterval(function () {

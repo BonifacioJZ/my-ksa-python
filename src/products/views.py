@@ -489,3 +489,11 @@ class BenefitDeleteView(LoginRequiredMixin,DeleteView):
     def form_valid(self, form):
         messages.success(request=self.request,message="El beneficio se ha eliminado correctamente")
         return super().form_valid(form)
+
+class FoundProductsListView(ListView):
+    template_name="benefit/index.html"
+    model= BenefitForm.Meta.model
+    queryset = model.objects.all().order_by('name')
+    context_object_name="benefits"
+    
+    

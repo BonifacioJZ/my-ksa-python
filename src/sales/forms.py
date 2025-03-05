@@ -1,9 +1,15 @@
 from django import forms
-from django.forms import Select,DateInput,DecimalField
+from django.forms import Select,DateInput,DecimalField,CharField,TextInput
 from .models import Sale
 from datetime import datetime
+
+class SearchProductForm(forms.Form):
+    query = CharField(max_length=250,required=False,label="",widget=TextInput(attrs={
+        "placeholder":"Ponga el Nombre o la Clave del producto",
+        "class":"form-control",
+    }))
 class SaleForm(forms.ModelForm):
-    total = forms.DecimalField(max_digits=10,decimal_places=2,widget=forms.TextInput(
+    total = DecimalField(max_digits=10,decimal_places=2,widget=TextInput(
         attrs={
             "readonly":True,
             "class":"form-control",
