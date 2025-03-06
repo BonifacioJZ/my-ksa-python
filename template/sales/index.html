@@ -151,7 +151,7 @@
         function findProduct(){
             let query = document.getElementById("id_query").value
             let newWindow = window.open(
-                "{% url 'client_store_emergent' %}"+"?query="+query,
+                "{% url 'benefit_emergent' %}"+"?query="+query,
                 "findProduct",
                 "width=600,height=400,left=200,top=200"
             );

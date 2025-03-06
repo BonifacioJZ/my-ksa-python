@@ -1,15 +1,6 @@
-{% extends '../layout/_layout.html' %}
+{% load static %}
+{% include '../components/_scripts.html' %}
 {% load crispy_forms_tags %}
-
-{% block title %}
-    
-    {% if title %}
-        {{title}}
-    {% else %}
-        App
-    {% endif %}
-        
-{% endblock title %}
 
 
 {% block content %}

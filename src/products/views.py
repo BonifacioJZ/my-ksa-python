@@ -4,6 +4,7 @@ from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView,CreateView,DetailView,UpdateView,DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import BrandForms,ProductForms,BenefitForm
+from django.db.models import Q
 from django.urls import reverse_lazy
 # Create your views here.
 
@@ -491,9 +492,31 @@ class BenefitDeleteView(LoginRequiredMixin,DeleteView):
         return super().form_valid(form)
 
 class FoundProductsListView(ListView):
-    template_name="benefit/index.html"
+    template_name="benefit/search.html"
     model= BenefitForm.Meta.model
     queryset = model.objects.all().order_by('name')
     context_object_name="benefits"
     
+    def get(self, request, *args, **kwargs):
+        benefits=[]
+        query = str(request.GET.get('query'))
+        if query:
+            benefits = self.model.objects.select_related().filter(
+                Q(product__name__icontains=query)|
+                Q(sku__icontains=query)|
+                Q(bar_code__icontains=query)
+            ).all()
+        print(benefits)
+        if benefits:
+            context={
+                "title":"Busqueda",
+                "benefits_list":benefits
+            }
+            return render(request,self.template_name,context)
+        context={
+                "title":"Busqueda",
+                "benefits_list":[]
+            }
+        messages.error(request,"No se econtro el producto buscado")
+        return render(request,self.template_name,context)
     

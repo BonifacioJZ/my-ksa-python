@@ -16,7 +16,7 @@ Including another URLconf
 """
 from .views import BrandListView,BrandCreateView,BrandDetailView,BrandUpdateView,BrandDeleteView
 from .views import ProductListView,ProductCreateView,ProductDetailView,ProductUpdateView,ProductDeleteView
-from .views import BenefitListView,BenefitCreateView,BenefitUpdateView,BenefitDeleteView
+from .views import BenefitListView,BenefitCreateView,BenefitUpdateView,BenefitDeleteView,FoundProductsListView
 from django.urls import path
 
 urlpatterns = [
@@ -36,5 +36,6 @@ urlpatterns_benefit = [
     path('',BenefitListView.as_view(),name="benefit_index"),
     path('new/',BenefitCreateView.as_view(),name="benefit_store"),
     path('<str:slug>/edit/',BenefitUpdateView.as_view(),name="benefit_edit"),
-    path('<str:slug>/delete/',BenefitDeleteView.as_view(),name="benefit_delete")
+    path('<str:slug>/delete/',BenefitDeleteView.as_view(),name="benefit_delete"),
+    path('emergent/list/',FoundProductsListView.as_view(),name="benefit_emergent"),
 ]
