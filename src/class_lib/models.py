@@ -1,6 +1,5 @@
 import uuid,datetime
 from django.db import models
-
 # Create your models here.
 class Person(models.Model):
     id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
