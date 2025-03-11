@@ -21,10 +21,11 @@ class Cart:
                 'price':str(product.price),
                 'qty':product.stock,
                 }
-            elif qty < 1:
+            elif qty <= 0:
                 self.cart[id]={
                 'product_id':id,
                 'name':product.product.name,
+                'sku':product.sku,
                 'benefit':product.name,
                 'price':str(product.price),
                 'qty':1,
@@ -39,4 +40,35 @@ class Cart:
                 'qty':qty,
                 }
         else:
-            pass
+            if qty <=0:
+                self.cart[id]['qty'] += 1
+                self.cart[id]['total'] = str(float(self.cart[id]['price']) * self.cart[id]['qty'])
+            else:
+                self.cart[id]['qty'] += qty
+                self.cart[id]['total'] = str(float(self.cart[id]['price']) * self.cart[id]['qty'])
+        self.save_cart()
+                
+    def save_cart(self):
+        self.session['cart']=self.cart
+        self.session.modified = True
+    
+    def remove(self,product:Benefit):
+        id = str(product.id)
+        if id in self.cart:
+            del self.cart[id]
+            self.save_cart()
+    
+    def subtract(self,product:Benefit):
+        id = str(product.id)
+        if id in self.cart.keys():
+            if self.cart[id]['qty'] > 1:
+                self.cart[id]['qty'] -= 1
+                self.cart[id]['total'] = str(float(self.cart[id]['price']) * self.cart[id]['qty'])
+            else:
+                self.remove(product)
+            self.save_cart()
+    
+    def clear(self):
+        self.session['cart'] = {}
+        self.session.modified = True
+        
