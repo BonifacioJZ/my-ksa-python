@@ -44,7 +44,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label">Total</label>
-                                    {{form.total}}
+                                    <input type="text" class="form-control" readonly name="total" id="total_id" value="{{total_cart}}">
                                 </div>
                             </div>
                         </div>
@@ -153,7 +153,7 @@
             let newWindow = window.open(
                 "{% url 'benefit_emergent' %}"+"?query="+query,
                 "findProduct",
-                "width=600,height=400,left=200,top=200"
+                "width=1000,height=500,left=200,top=100"
             );
             let timer = setInterval(function () {
                 if (newWindow.closed) {

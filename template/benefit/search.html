@@ -17,6 +17,8 @@
                     <th>Producto</th>
                     <th>SKU</th>
                     <th>Precio</th>
+                    <th>Disponibles</th>
+                    <th>Cantidad</th>
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -27,29 +29,30 @@
                     <td>{{benefit.name}}</td>
                     <td>{{benefit.product.name}}</td>
                     <td>{{benefit.sku}}</td>
+                    <td>{{benefit.stock}}</td>
                     <td>$ {{benefit.price}}</td>
-                    <td>
-                      <a href="{% url 'product_detail' benefit.product.slug %}?benefit={{benefit.slug}}" class="btn btn-primary btn-sm">
-                          <i class="fa-solid fa-eye"></i>
-                      </a>
-                      <a
-                        class="btn btn-warning btn-sm"
-                        href="{% url 'benefit_edit' benefit.slug %}"
-                        ><i class="fa-solid fa-pen-to-square"></i></a
-                      >
-                      <a
-                        class="btn btn-danger btn-sm"
-                        href="{% url 'benefit_delete' benefit.slug  %}"
-                        ><i class="fa-solid fa-trash"></i></a
-                      >
-                    </td>
+                    
+                    {% if benefit.stock <= 0 %}
+                      <td><input type="text" name="quantity" readonly id="quantity" class="form-control" value="0" ></td>
+                      <td>No disponible</td>
+                    {% else %}
+                    <form action="{% url 'add_product' benefit.slug %}" method="POST">
+                      {% csrf_token %}
+                      <td>
+                        <input type="text" name="qty" id="qty" class="form-control" value="1" >
+                      </td>
+                      <td>
+                        <button type="submit" class="btn btn-primary btn-sm">
+                          <i class="fa-solid fa-cart-plus"></i>
+                        </button>
+                      </td>
+                    </form>
+                    {% endif %}
+                      
                   </tr>
                   {% endfor %}
                 </tbody>
               </table>
-            </div>
-            <div class="card-footer">
-              <a href="{% url 'benefit_store' %}" class="btn btn-primary">Nuevos beneficios</a>
             </div>
           </div>
         </div>

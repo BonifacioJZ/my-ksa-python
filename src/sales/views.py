@@ -5,6 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from .forms import SaleForm,SearchProductForm
+from src.class_lib.Cart import Cart
+from src.products.models import Benefit
 # Create your views here.
 
 class SalesCreateView(LoginRequiredMixin,CreateView):
@@ -18,4 +20,11 @@ class SalesCreateView(LoginRequiredMixin,CreateView):
         context["title"] = "Ventas"
         context["search"] = SearchProductForm()
         return context
+
+def add_product(request:HttpRequest,slug:str):
+    cart = Cart(request)
+    if request.POST:
+        product = Benefit.objects.select_related().filter(slug=slug).first()
+        qty = float(request.POST.get('qty'))
+        print(qty)
     
