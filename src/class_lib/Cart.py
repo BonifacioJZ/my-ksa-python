@@ -12,41 +12,24 @@ class Cart:
     
     def add(self,product:Benefit,qty):
         id = str(product.id)
-        if id not in self.cart.keys():
-            if qty > product.stock:
-                self.cart[id]={
-                'product_id':id,
-                'name':product.product.name,
-                'benefit':product.name,
-                'price':str(product.price),
-                'qty':product.stock,
-                }
-            elif qty <= 0:
-                self.cart[id]={
-                'product_id':id,
-                'name':product.product.name,
-                'sku':product.sku,
-                'benefit':product.name,
-                'price':str(product.price),
-                'qty':1,
-                }
-            else:
-                self.cart[id]={
-                'product_id':id,
-                'name':product.product.name,
-                'benefit':product.name,
-                'price':str(product.price),
-                'total':str(product.price*qty),
-                'qty':qty,
-                }
+        cart = self.cart
+        qty_in_cart = float(cart[id]['qty']) if id in cart else 0
+        total_qty = qty_in_cart + qty
+        if total_qty > product.stock:
+            return False
         else:
-            if qty <=0:
-                self.cart[id]['qty'] += 1
-                self.cart[id]['total'] = str(float(self.cart[id]['price']) * self.cart[id]['qty'])
-            else:
-                self.cart[id]['qty'] += qty
-                self.cart[id]['total'] = str(float(self.cart[id]['price']) * self.cart[id]['qty'])
+            cart[id] = {
+                'id':id,
+                'name':product.name,
+                'benefit':product.product.name,
+                'sku':product.sku,
+                'price':str(product.price),
+                'qty':total_qty,
+                'total':str(float(product.price) * total_qty)
+            }
+        
         self.save_cart()
+        return True
                 
     def save_cart(self):
         self.session['cart']=self.cart

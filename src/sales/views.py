@@ -18,6 +18,7 @@ class SalesCreateView(LoginRequiredMixin,CreateView):
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
         context["title"] = "Ventas"
+        
         context["search"] = SearchProductForm()
         return context
 
@@ -26,5 +27,17 @@ def add_product(request:HttpRequest,slug:str):
     if request.POST:
         product = Benefit.objects.select_related().filter(slug=slug).first()
         qty = float(request.POST.get('qty'))
-        print(qty)
+        success = cart.add(product,qty)
+        if not success:
+            messages.error(request,"No hay suficiente stock")
+            return render(request,'components/_close_windows.html')
+        messages.success(request,"Producto agregado al carrito")
+        return render(request,'components/_close_windows.html')
+
+def remove_product(request:HttpRequest,pk:str):
+    cart = Cart(request)
+    product = Benefit.objects.select_related().filter(id=pk).first()
+    cart.remove(product)
+    messages.success(request,"Producto eliminado del carrito")
+    return redirect('sales_index')
     
