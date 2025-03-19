@@ -41,15 +41,21 @@ class Cart:
             del self.cart[id]
             self.save_cart()
     
-    def subtract(self,product:Benefit):
+    def subtract(self,product:Benefit,qty):
         id = str(product.id)
-        if id in self.cart.keys():
-            if self.cart[id]['qty'] > 1:
-                self.cart[id]['qty'] -= 1
-                self.cart[id]['total'] = str(float(self.cart[id]['price']) * self.cart[id]['qty'])
+        if id in self.cart:
+            actual_qty = float(self.cart[id]['qty'])
+            new_qty = actual_qty - float(qty)   
+            if new_qty <= 0:
+                del self.cart[id]
             else:
-                self.remove(product)
+                self.cart[id]['qty']= new_qty
+                self.cart[id]['total'] = str(float(product.price) * new_qty)
             self.save_cart()
+            return True
+        else:
+            return False
+            
     
     def clear(self):
         self.session['cart'] = {}
