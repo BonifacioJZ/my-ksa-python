@@ -39,10 +39,6 @@
                                     {{form.client}}
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="form-label" >Estado</label>
-                                    {{form.status}}
-                                </div>
-                                <div class="col-md-2">
                                     <label class="form-label">Total</label>
                                     <input type="text" class="form-control" readonly name="total" id="total_id" value="{{total_cart}}">
                                 </div>
@@ -82,7 +78,7 @@
                                         <th>QTY</th>
                                         <th>Precio</th>
                                         <th>Total</th>
-                                        <th>Eliminar</th>
+                                        <th>Acciones</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -120,10 +116,17 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a href="#" class="btn btn-primary">
-                    Guardar
-                </a>
-                <a class="btn btn-success" href="">
+                
+                {% if total_cart == 0 %}
+                <a href="#" class="btn btn-succes disabled" tabindex="-1" role="button" aria-disabled="true">Pagar</a>
+
+                {% else %}
+                    <a  onclick="sendClient()" class="btn btn-success">
+                        Pagar
+                    </a>
+                {% endif %}
+                    
+                <a class="btn btn-danger" href="">
                     Actualizar
                 </a>
             </div>
@@ -162,6 +165,14 @@
           });
         });
 
+        function sendClient(){
+            let client = document.getElementById("id_client").value
+            let client_id = "c9db1ea0-c19d-41d6-b6af-59f701fc6c5a"
+            if (client == "") { 
+                client = client_id
+            }
+            window.location.href="{% url 'create_sale' %}"+"?client="+client
+        }
         function newClient() {
             let newWindow = window.open(
                 "{% url 'client_store_emergent' %}",
