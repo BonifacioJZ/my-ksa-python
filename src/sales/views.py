@@ -9,6 +9,7 @@ from src.class_lib.Cart import Cart
 from src.clients.models import Client
 from src.products.models import Benefit
 from datetime import datetime
+from src.class_lib import generators_pdf
 # Create your views here.
 
 class SalesIndexView(LoginRequiredMixin,TemplateView):
@@ -34,7 +35,23 @@ class SalesCreateView(LoginRequiredMixin,CreateView):
         context["date"] = datetime.now().strftime("%d-%m-%Y")
         return context
     
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        form = SaleForm(request.POST)
+        #TODO(Terminar)
     
+
+def generate_pdf(request:HttpRequest):
+    client_id = request.GET.get('client')
+    client = Client.objects.filter(id=client_id).first()
+    context = {
+        "client":client,
+        "date":datetime.now().strftime("%d-%m-%Y"),
+        "cart":request.session.get('cart'),
+        "total":request.session.get('total')
+    }
+    return generators_pdf.generators_pdf('pdf/factura.html',context)
+
 def add_product(request:HttpRequest,slug:str):
     cart = Cart(request)
     if request.POST:
