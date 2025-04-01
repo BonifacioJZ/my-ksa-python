@@ -1,14 +1,15 @@
 from django.template.loader import render_to_string
 
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpRequest
 from weasyprint import HTML
 
-def generators_pdf(template:str,context):
+def generators_pdf(request:HttpRequest,template:str,context):
     """
     Generate a PDF file from a template and context.
     """
-    html = render_to_string(template,context)
-    response = HttpResponse(content_type="application/pdf")
+    # Render the template with the context
+    html = render_to_string(template,context) 
+    pdf = HTML(string=html,base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf,content_type="application/pdf")
     response["Content-Disposition"] = "inline; report.pdf"
-    HTML(string=html).write_pdf(response)
     return response

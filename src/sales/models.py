@@ -1,6 +1,7 @@
 import string
 from django.db import models
 import uuid
+import random
 from datetime import datetime
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
@@ -17,7 +18,7 @@ class Sale(models.Model):
     id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
     folio = models.CharField(max_length=20,unique=True,blank=True)
     client = models.ForeignKey(Client,verbose_name="Cliente",on_delete=models.CASCADE)
-    date = models.DateField(verbose_name="Fecha")
+    date = models.DateTimeField(auto_now_add=True)  
     total = models.DecimalField(verbose_name="Total",max_digits=10,decimal_places=2)
     status = models.CharField(choices=CHOICES,max_length=15,verbose_name="Estado")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -34,8 +35,8 @@ class Sale(models.Model):
     def save(self, *args, **kwargs):
         if not self.folio:
             date = datetime.now().strftime("%Y%m%d")
-            random = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
-            self.folio = f"{date}-{random}"  # Formato 20240219-ABC12
+            rand = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+            self.folio = f"{date}-{rand}"  # Formato 20240219-ABC12
         super().save(*args, **kwargs)
 
 class Detail(models.Model):

@@ -9,25 +9,24 @@ class SearchProductForm(forms.Form):
         "class":"form-control",
     }))
 class SaleForm(forms.ModelForm):
-    total = DecimalField(max_digits=10,decimal_places=2,widget=TextInput(
+    total = DecimalField(required=False,max_digits=10,decimal_places=2,widget=TextInput(
         attrs={
             "readonly":True,
             "class":"form-control",
             "value":0.0
+
         }
     ))
-    date = forms.DateField(widget=DateInput(attrs={
+    date = forms.DateField(required=False,widget=DateInput(attrs={
                                 "readonly":True,
                                 'class':'form-control datetimepicker-input"',
-                                'value':datetime.now().strftime("%d-%m-%Y")
+                                'value':datetime.now().strftime("%d-%m-%Y"),
                             }
     ))
-    def __ini__(self,*args, **kwargs):
-        super().__init__(*args,**kwargs)
     
     class Meta:
         model = Sale
-        fields= ('date','client','status','total')
+        fields= ['client','status','total',]
         widgets={
             'client': Select(attrs={
                 'class':'form-control select2',
@@ -35,6 +34,8 @@ class SaleForm(forms.ModelForm):
             }),
             'status':Select(attrs={
                 'class':'form-control select2',
-                'style':'width:100%'
+                'style':'width:100%',
             })
         }
+    
+        

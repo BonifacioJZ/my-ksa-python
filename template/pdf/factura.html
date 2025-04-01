@@ -1,4 +1,4 @@
-{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +8,27 @@
   {% block title %}
   {% endblock title %}
     </title>
-    {% include '../components/_scripts.html' %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ request.build_absolute_uri }}/static/css/adminlte.min.css">
+    <!-- jQuery -->
+    <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ request.build_absolute_uri }}/static/js/adminlte.min.js"></script>
+    <style>
+        @font-face {
+          font-family: 'Sans Pro';
+          src: url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback') format('truetype');
+      }
+    
+      body {
+          font-family: 'Sans Pro', sans-serif;
+      }
+    </style>
 </head>
 <body>
     <section class="content">
@@ -32,7 +52,7 @@
                   <div class="col-sm-4 invoice-col">
                     De:
                     <address>
-                      <strong>{{request.session.user.name}}</strong><br>
+                      <strong>{{user}}</strong><br>
                       795 Folsom Ave, Suite 600<br>
                       San Francisco, CA 94107<br>
                       Phone: (804) 123-5432<br>
@@ -66,7 +86,7 @@
                       </tr>
                       </thead>
                       <tbody>
-                      {% for item in cart %}
+                      {% for item in cart.values %}
                           <tr>
                               <td>{{item.qty}}</td>
                               <td> {{item.benefit}} {{item.name}}</td>
@@ -93,7 +113,7 @@
                       <table class="table">
                         <tr>
                           <th>Total:</th>
-                          <td>${{total_cart}}</td>
+                          <td>${{total}}</td>
                         </tr>
                       </table>
                     </div>

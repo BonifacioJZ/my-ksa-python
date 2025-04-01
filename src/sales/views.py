@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 from .forms import SaleForm,SearchProductForm
 from src.class_lib.Cart import Cart
+from .context_process import total_cart
 from src.clients.models import Client
 from src.products.models import Benefit
 from datetime import datetime
@@ -20,6 +21,7 @@ class SalesIndexView(LoginRequiredMixin,TemplateView):
         context["title"] = "Ventas"
         context["form"] = SaleForm()
         context["search"] = SearchProductForm()
+        context["date"] = datetime.now().strftime("%d-%m-%Y")
         return context
 
 class SalesCreateView(LoginRequiredMixin,CreateView):
@@ -36,9 +38,31 @@ class SalesCreateView(LoginRequiredMixin,CreateView):
         return context
     
     def post(self, request, *args, **kwargs):
+        cart = request.session.get('cart',{})
+        if not cart:
+            messages.error(request,"No hay productos en el carrito")
+            return redirect(reverse_lazy('sales_index'))
         print(request.POST)
         form = SaleForm(request.POST)
-        #TODO(Terminar)
+        if form.is_valid():
+            sale = form.save(commit=False)
+            sale.total = total_cart(request)['total_cart']
+            sale.client = Client.objects.filter(id=str(request.POST.get('client'))).first()
+            sale.save()
+            for item in cart.values():
+                product = Benefit.objects.filter(id=item['id']).first()
+                product.stock -= float(item['qty'])
+                product.save()
+            #TODO("Terminar")
+            
+        messages.error(request,"Error al guardar la venta")
+        context ={
+            "title": "Ventas",
+            "form": form,
+            "client": Client.objects.filter(id=str(request.POST.get('client'))).first(),
+            "date": datetime.now().strftime("%d-%m-%Y"),
+        }
+        return render(request,self.template_name,context)
     
 
 def generate_pdf(request:HttpRequest):
@@ -46,11 +70,12 @@ def generate_pdf(request:HttpRequest):
     client = Client.objects.filter(id=client_id).first()
     context = {
         "client":client,
+        "user":request.user.username,
         "date":datetime.now().strftime("%d-%m-%Y"),
-        "cart":request.session.get('cart'),
-        "total":request.session.get('total')
+        "cart":request.session.get('cart',{}),
+        "total":total_cart(request)['total_cart'],
     }
-    return generators_pdf.generators_pdf('pdf/factura.html',context)
+    return generators_pdf.generators_pdf(request,'pdf/factura.html',context)
 
 def add_product(request:HttpRequest,slug:str):
     cart = Cart(request)
