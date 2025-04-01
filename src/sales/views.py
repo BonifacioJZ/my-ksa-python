@@ -9,6 +9,7 @@ from src.class_lib.Cart import Cart
 from .context_process import total_cart
 from src.clients.models import Client
 from src.products.models import Benefit
+from .models import Detail
 from datetime import datetime
 from src.class_lib import generators_pdf
 # Create your views here.
@@ -53,6 +54,13 @@ class SalesCreateView(LoginRequiredMixin,CreateView):
                 product = Benefit.objects.filter(id=item['id']).first()
                 product.stock -= float(item['qty'])
                 product.save()
+                detail = Detail()
+                detail.sale = sale
+                detail.product = product
+                detail.quantity = item['qty']
+                detail.price = item['price']
+                detail.total = item['total']
+                detail.save()
             #TODO("Terminar")
             
         messages.error(request,"Error al guardar la venta")
