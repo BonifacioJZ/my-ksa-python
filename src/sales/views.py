@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView,DetailView
 from .forms import SaleForm,SearchProductForm
 from src.class_lib.Cart import Cart
 from .context_process import total_cart
@@ -33,6 +33,7 @@ class SalesCreateView(LoginRequiredMixin,CreateView):
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
         context["title"] = "Ventas"
+        context["subtitle"] = "Resumen de la venta"
         client_id = self.request.GET.get('client')
         context["client"] = Client.objects.filter(id=client_id).first()
         context["date"] = datetime.now().strftime("%d-%m-%Y")
@@ -40,10 +41,11 @@ class SalesCreateView(LoginRequiredMixin,CreateView):
     
     def post(self, request, *args, **kwargs):
         cart = request.session.get('cart',{})
+        
+        sale:SaleForm.Meta.model = {} 
         if not cart:
             messages.error(request,"No hay productos en el carrito")
             return redirect(reverse_lazy('sales_index'))
-        print(request.POST)
         form = SaleForm(request.POST)
         if form.is_valid():
             sale = form.save(commit=False)
@@ -54,15 +56,18 @@ class SalesCreateView(LoginRequiredMixin,CreateView):
                 product = Benefit.objects.filter(id=item['id']).first()
                 product.stock -= float(item['qty'])
                 product.save()
-                detail = Detail()
-                detail.sale = sale
-                detail.product = product
-                detail.quantity = item['qty']
-                detail.price = item['price']
-                detail.total = item['total']
-                detail.save()
-            #TODO("Terminar")
-            
+                Detail.objects.create(
+                    sale=sale,
+                    product=product,
+                    quantity=item['qty'],
+                    price=item['price'],
+                    total=item['total']
+                )
+            cart = Cart(request)
+            cart.clear()
+            messages.success(request,"Venta guardada correctamente")
+            return redirect('sale_detail',sale.id)
+        
         messages.error(request,"Error al guardar la venta")
         context ={
             "title": "Ventas",
@@ -71,7 +76,29 @@ class SalesCreateView(LoginRequiredMixin,CreateView):
             "date": datetime.now().strftime("%d-%m-%Y"),
         }
         return render(request,self.template_name,context)
+
+class SaleDetailView(LoginRequiredMixin,DetailView):
+    template_name="sales/show.html"
+    model = SaleForm.Meta.model
+    context_object_name = "sale"
+    queryset = SaleForm.Meta.model.objects.all()
     
+    def get_context_data(self, **kwargs) -> dict[str, any]:
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Ventas"
+        return context
+    
+    def get(self, request,pk=None, *args, **kwargs):
+        sale = self.get_queryset().select_related().filter(id=pk).first()
+        #Todo: Cambiar a una vista de detalle
+        if sale:
+            context = self.get_context_data()
+            context["sale"] = sale
+            context["details"] = sale.details.select_related('product')
+            context["client"] = sale.client
+            context["date"] = datetime.now().strftime("%d-%m-%Y")
+            context["user"] = request.user.username
+        return super().get(request, *args, **kwargs)
 
 def generate_pdf(request:HttpRequest):
     client_id = request.GET.get('client')

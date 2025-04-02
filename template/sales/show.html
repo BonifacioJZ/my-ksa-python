@@ -1,5 +1,5 @@
 {% extends '../layout/_layout.html' %}
-{% load crispy_forms_tags %}
+
 {% block title %}
     
     {% if title %}
@@ -35,7 +35,7 @@
                 <div class="col-12">
                   <h4>
                     <i class="fas fa-globe"></i> MY-KSA
-                    <small class="float-right">Fecha: {{date}}</small>
+                    <small class="float-right">Fecha:</small>
                   </h4>
                 </div>
                 <!-- /.col -->
@@ -45,7 +45,7 @@
                 <div class="col-sm-4 invoice-col">
                   De:
                   <address>
-                    <strong>{{user.name}}</strong><br>
+                    <strong></strong><br>
                     795 Folsom Ave, Suite 600<br>
                     San Francisco, CA 94107<br>
                     Phone: (804) 123-5432<br>
@@ -56,10 +56,10 @@
                 <div class="col-sm-4 invoice-col">
                 Cliente
                   <address>
-                    <strong>{{client.name}} {{client.last_name}}</strong><br>
-                    Direccion: {{client.address}}<br>
-                    Telefono: {{client.phone}}<br>
-                    Email: {{client.email}}
+                    <strong></strong><br>
+                    Direccion: <br>
+                    Telefono: <br>
+                    Email: 
                   </address>
                 </div>
               </div>
@@ -79,14 +79,6 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for id,item in request.session.cart.items %}
-                        <tr>
-                            <td>{{item.qty}}</td>
-                            <td> {{item.benefit}} {{item.name}}</td>
-                            <td>{{item.sku}}</td>
-                            <td>${{item.total}}</td>
-                        </tr>
-                    {% endfor %}
                     </tbody>
                   </table>
                 </div>
@@ -118,19 +110,6 @@
               <!-- this row will not appear when printing -->
               <div class="row no-print">
                 <div class="col-12">
-                  <form action="." method="post">
-                    {% csrf_token %}
-                    <div class="row justify-content-end">
-                      <div class="col-3">
-                        {{form.status}}
-                      </div>
-                    </div>
-                    <hr>
-                    <input name="client" value="{{client.id}}" type="hidden">
-                    <button type="submit" class="btn btn-success float-right"><i class="far fa-credit-card"></i> 
-                      Pagar
-                    </button>
-                  </form>
                 </div>
               </div>
             </div>
@@ -144,21 +123,27 @@
 {% endblock  %}
 
 {% block javascript %}
-  <script>
-    document.getElementById('pdf-link').addEventListener('click', function(event) {
-      setTimeout(function() {
-        window.print();  // Abre la ventana de impresión
-      }, 1000);  // Espera 1 segundo para que el PDF cargue
-    });
-    $(document).ready(function () {
-      {% for message in messages %}
-          Swal.fire({
-              icon: "{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
-              title: "{% if message.tags == 'success' %}¡Éxito!{% elif message.tags == 'error' %}¡Error!{% elif message.tags == 'warning' %}¡Advertencia!{% else %}Información{% endif %}",
-              text: "{{ message }}",
-              confirmButtonText: "Aceptar"
+      <script type="text/javascript">
+        $(document).ready(function () {
+          {% for message in messages %}
+            Swal.fire({
+                icon: "{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
+                title: "{% if message.tags == 'success' %}¡Éxito!{% elif message.tags == 'error' %}¡Error!{% elif message.tags == 'warning' %}¡Advertencia!{% else %}Información{% endif %}",
+                text: "{{ message }}",
+                confirmButtonText: "Aceptar"
+            });
+        {% endfor %}  
+          $("#suppliers").DataTable({
+            responsive: true,
+            language: {
+              info: 'Mostrando página _PAGE_ por _PAGES_',
+              infoEmpty: 'No hay registros disponibles',
+              infoFiltered: '(filtrado de _MAX_ Registros Totales)',
+              lengthMenu: 'Mostar _MENU_ registros por pagina',
+              zeroRecords: 'No se encontraron registros',
+              search: 'Buscar:',
+          }
           });
-      {% endfor %}
-  });
-</script>
-{% endblock %}
+        });
+      </script>
+      {% endblock %}
