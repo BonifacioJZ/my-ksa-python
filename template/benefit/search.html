@@ -13,7 +13,6 @@
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Nombre</th>
                     <th>Producto</th>
                     <th>SKU</th>
                     <th>Precio</th>
@@ -26,12 +25,10 @@
                   {% for benefit in benefits_list %}
                   <tr>
                     <td>{{forloop.counter}}</td>
-                    <td>{{benefit.name}}</td>
-                    <td>{{benefit.product.name}}</td>
+                    <td>{{benefit.product.name}} {{benefit.name}}</td>
                     <td>{{benefit.sku}}</td>
-                    <td>{{benefit.stock}}</td>
                     <td>$ {{benefit.price}}</td>
-                    
+                    <td>{{benefit.stock}}</td>
                     {% if benefit.stock <= 0 %}
                       <td><input type="text" name="quantity" readonly id="quantity" class="form-control" value="0" ></td>
                       <td>No disponible</td>

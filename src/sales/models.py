@@ -41,7 +41,7 @@ class Sale(models.Model):
 
 class Detail(models.Model):
     id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
-    sale = models.ForeignKey(Sale,on_delete=models.CASCADE)
+    sale = models.ForeignKey(Sale,verbose_name="Venta",related_name="sales",on_delete=models.CASCADE)
     product = models.ForeignKey(Benefit,verbose_name="Producto",related_name="products",on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name="Cantidad",blank=False,null=False)
     price = models.DecimalField(verbose_name="Precio",max_digits=10,decimal_places=2)
@@ -55,4 +55,4 @@ class Detail(models.Model):
         verbose_name_plural = 'details'
     
     def __str__(self) -> str:
-        return self.product
+        return f"{self.product.name} - {self.product.product.name}"

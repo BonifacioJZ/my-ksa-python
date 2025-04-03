@@ -145,11 +145,7 @@
 
 {% block javascript %}
   <script>
-    document.getElementById('pdf-link').addEventListener('click', function(event) {
-      setTimeout(function() {
-        window.print();  // Abre la ventana de impresión
-      }, 1000);  // Espera 1 segundo para que el PDF cargue
-    });
+    
     $(document).ready(function () {
       {% for message in messages %}
           Swal.fire({

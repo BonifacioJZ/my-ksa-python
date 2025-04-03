@@ -89,26 +89,33 @@ class SaleDetailView(LoginRequiredMixin,DetailView):
         return context
     
     def get(self, request,pk=None, *args, **kwargs):
-        sale = self.get_queryset().select_related().filter(id=pk).first()
-        #Todo: Cambiar a una vista de detalle
+        sale:SaleForm.Meta.model = self.get_queryset().prefetch_related().filter(id=pk).first()
+        
         if sale:
-            context = self.get_context_data()
-            context["sale"] = sale
-            context["details"] = sale.details.select_related('product')
-            context["client"] = sale.client
-            context["date"] = datetime.now().strftime("%d-%m-%Y")
-            context["user"] = request.user.username
-        return super().get(request, *args, **kwargs)
+            context= {
+            "title": "Ventas",
+            "sale":sale,
+            "date": datetime.now().strftime("%d-%m-%Y"),
+            "user": request.user.username,
+            "details": sale.sales.all(),
+            "client": sale.client,
+        }
+            
+            return render(request,self.template_name,context)
+        else:
+            messages.error(request,"No se encontro la venta")
+            return redirect(reverse_lazy('sales_index'))
 
-def generate_pdf(request:HttpRequest):
-    client_id = request.GET.get('client')
-    client = Client.objects.filter(id=client_id).first()
+def generate_pdf(request:HttpRequest,folio=None):
+    sale= SaleForm.Meta.model.objects.prefetch_related().filter(folio=folio).first()
     context = {
-        "client":client,
+        "client":sale.client,
+        "sale":sale,
+        "title":"Factura",
         "user":request.user.username,
         "date":datetime.now().strftime("%d-%m-%Y"),
-        "cart":request.session.get('cart',{}),
-        "total":total_cart(request)['total_cart'],
+        "cart":sale.sales.all(),
+        "total":sale.total,
     }
     return generators_pdf.generators_pdf(request,'pdf/factura.html',context)
 

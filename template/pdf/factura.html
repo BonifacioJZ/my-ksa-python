@@ -69,6 +69,12 @@
                       Email: {{client.email}}
                     </address>
                   </div>
+                  <div class="col-sm-4 invoice-col">
+                    <b>Folio: {{sale.folio}}</b><br>
+                    <br>
+                    <b>Fecha: </b> {{sale.date}}<br>
+                    <b>Estado:</b> {{sale.get_status_display}}<br>
+                  </div>
                 </div>
                 <!-- /.row -->
   
@@ -86,11 +92,11 @@
                       </tr>
                       </thead>
                       <tbody>
-                      {% for item in cart.values %}
+                      {% for item in cart %}
                           <tr>
-                              <td>{{item.qty}}</td>
-                              <td> {{item.benefit}} {{item.name}}</td>
-                              <td>{{item.sku}}</td>
+                              <td>{{item.quantity }}</td>
+                              <td> {{item.product.name}} {{item.product.product.name}}</td>
+                              <td>{{item.product.sku}}</td>
                               <td>${{item.total}}</td>
                           </tr>
                       {% endfor %}
