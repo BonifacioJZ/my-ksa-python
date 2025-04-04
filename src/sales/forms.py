@@ -23,10 +23,22 @@ class SaleForm(forms.ModelForm):
                                 'value':datetime.now().strftime("%d-%m-%Y"),
                             }
     ))
-    
+    pay = DecimalField(required=True,max_digits=10,decimal_places=2,widget=TextInput(
+        attrs={
+            "class":"form-control",
+            "value":0.0,
+        }
+    ))
+    change = DecimalField(required=True,max_digits=10,decimal_places=2,widget=TextInput(
+        attrs={
+            "readonly":True,
+            "class":"form-control",
+            "value":0.0,
+        }
+    ))
     class Meta:
         model = Sale
-        fields= ['client','status','total',]
+        fields= ['client','status','total','pay','change']
         widgets={
             'client': Select(attrs={
                 'class':'form-control select2',

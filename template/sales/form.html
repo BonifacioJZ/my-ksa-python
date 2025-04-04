@@ -124,6 +124,12 @@
                       <div class="col-3">
                         {{form.status}}
                       </div>
+                      <div>
+                        {{form.pay}}
+                      </div>
+                      <div class="col-3">
+                        {{form.change}}
+                      </div class="col-3">
                     </div>
                     <hr>
                     <input name="client" value="{{client.id}}" type="hidden">
@@ -155,6 +161,16 @@
               confirmButtonText: "Aceptar"
           });
       {% endfor %}
+      $('#id_pay').on('input', function(){
+        var total = parseFloat({{total_cart}}) || 0;
+        var pay = parseFloat($(this).val())|| 0;
+        var change = pay - total;
+        if(change>=0){
+          $('#id_change').val(change.toFixed(2));
+        }else{
+          $('#id_change').val("Falta Dinero");
+        }
+      })
   });
 </script>
 {% endblock %}

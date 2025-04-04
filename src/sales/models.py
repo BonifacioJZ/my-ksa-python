@@ -20,6 +20,8 @@ class Sale(models.Model):
     client = models.ForeignKey(Client,verbose_name="Cliente",on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)  
     total = models.DecimalField(verbose_name="Total",max_digits=10,decimal_places=2)
+    pay = models.DecimalField(verbose_name="Pago",max_digits=10,decimal_places=2,blank=True,null=True)
+    change = models.DecimalField(verbose_name="Cambio",max_digits=10,decimal_places=2,blank=True,null=True)
     status = models.CharField(choices=CHOICES,max_length=15,verbose_name="Estado")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

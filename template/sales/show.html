@@ -108,8 +108,16 @@
                   <div class="table-responsive">
                     <table class="table">
                       <tr>
-                        <th>Total:</th>
+                        <th>Total: </th>
                         <td>${{sale.total}}</td>
+                      </tr>
+                      <tr>
+                        <th>Pago: </th>
+                        <td>${{sale.pay}}</td>
+                      </tr>
+                      <tr>
+                        <th>Cambio: </th>
+                        <td>${{sale.change}}</td>
                       </tr>
                     </table>
                   </div>
@@ -152,11 +160,7 @@
             });
         {% endfor %}
         $('#print').on('click', function() {
-          var pdfLink = $(this).attr('href');
-          var newWindow = window.open(pdfLink);
-          newWindow.onload = function() {
-            newWindow.print();
-          };
+          window.addEventListener("load", window.print());
         });
           $("#suppliers").DataTable({
             responsive: true,
