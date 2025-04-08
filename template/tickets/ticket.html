@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @page {
+      size: 80mm auto;
+      margin: 5mm;
+    }
+    body {
+      font-family: monospace;
+      font-size: 10px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .logo img {
+      width: 60px;
+      height: auto;
+      margin: 0 auto;
+      display: block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+    }
+    th, td {
+      text-align: left;
+      padding: 2px 0;
+      border-bottom: 1px dashed #ccc;
+    }
+    .totales {
+      margin-top: 10px;
+      text-align: right;
+      font-weight: bold;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 9px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">
+      <img src="{{ logo_path }}">
+    </div>
+    <h3>MY-KSA</h3>
+    <p>Ticket de Compra</p>
+    <p>Fecha: {{ sale.date }}</p>
+    <p>Folio: {{ folio }}</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Cant</th>
+        <th>Precio</th>
+        <th>Subt</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart %}
+      <tr>
+        <td> {{item.product.name}} {{item.product.product.name}}</td>
+        <td>{{item.quantity }}</td>
+        <td>${{ item.price }}</td>
+        <td>${{ item.total }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="totales">
+    Total: ${{ total }}
+    <div>
+        <strong>Pago :</strong> ${{ sale.pay }}
+    </div>
+    <div>
+        <strong>Cambio :</strong> ${{ sale.change }}
+    </div>
+  </div>
+
+  <div class="footer">
+    ¡Gracias por su compra!
+  </div>
+
+</body>
+</html>

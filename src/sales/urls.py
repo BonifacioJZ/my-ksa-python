@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from .views import SalesIndexView,SalesCreateView,SaleDetailView,add_product,remove_product,add_one_product,subtract_one_product
-from .views import generate_pdf
+from .views import generate_pdf, generate_ticket
 from django.urls import path
 
 urlpatterns = [
@@ -23,6 +23,7 @@ urlpatterns = [
     path('save/',SalesCreateView.as_view(),name="create_sale"),
     path('add/<str:slug>/',add_product,name="add_product"),
     path('pdf/<str:folio>',generate_pdf,name="generate_pdf"),
+    path('ticket/<str:folio>',generate_ticket,name="generate_ticket"),
     path('add_one/<str:pk>/',add_one_product,name="add_one_product"),
     path('detail/<str:pk>/',SaleDetailView.as_view(),name="sale_detail"),
     path('subtract_one/<str:pk>/',subtract_one_product,name="remove_one_product"),

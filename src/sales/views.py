@@ -105,7 +105,18 @@ class SaleDetailView(LoginRequiredMixin,DetailView):
         else:
             messages.error(request,"No se encontro la venta")
             return redirect(reverse_lazy('sales_index'))
-
+def generate_ticket(request:HttpRequest,folio=None):
+    sale= SaleForm.Meta.model.objects.prefetch_related().filter(folio=folio).first()
+    context = {
+        "folio":folio,
+        "sale":sale,
+        "title":"Ticket",
+        "date":datetime.now().strftime("%d-%m-%Y"),
+        "logo_path": request.build_absolute_uri('/static/img/log.png'),
+        "cart":sale.sales.all(),
+        "total":sale.total,
+    }
+    return generators_pdf.ticket_generator(request,'tickets/ticket.html',context)
 def generate_pdf(request:HttpRequest,folio=None):
     sale= SaleForm.Meta.model.objects.prefetch_related().filter(folio=folio).first()
     context = {
