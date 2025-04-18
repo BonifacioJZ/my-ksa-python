@@ -35,7 +35,7 @@
                 <div class="col-12">
                   <h4>
                     <i class="fas fa-globe"></i> MY-KSA
-                    <small class="float-right">Fecha: {{date}}</small>
+                    <small class="float-right">Fecha: {{sale.date}}</small>
                   </h4>
                 </div>
                 <!-- /.col -->
@@ -45,7 +45,7 @@
                 <div class="col-sm-4 invoice-col">
                   De:
                   <address>
-                    <strong>{{user.name}}</strong><br>
+                    <strong>{{user.username}}</strong><br>
                     <!--TODO(Por poner datos)-->
                   </address>
                 </div>
@@ -76,11 +76,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for id,item in request.session.cart.items %}
+                    {% for item in details %}
                         <tr>
-                            <td>{{item.qty}}</td>
-                            <td> {{item.benefit}} {{item.name}}</td>
-                            <td>{{item.sku}}</td>
+                            <td>{{item.quantity}}</td>
+                            <td>{{item.product.product.name}} - {{item.product.name}}</td>
+                            <td>{{item.product.sku}}</td>
                             <td>${{item.total}}</td>
                         </tr>
                     {% endfor %}
@@ -90,7 +90,6 @@
                 <!-- /.col -->
               </div>
               <!-- /.row -->
-
               <div class="row">
                 <!-- accepted payments column -->
                 <div class="col-6">
@@ -103,8 +102,22 @@
                     <table class="table">
                       <tr>
                         <th>Total:</th>
-                        <td>${{total_cart}}</td>
+                        <td>${{sale.total}}</td>
                       </tr>
+                        {% if sale.status == "paid" %}
+                        <tr>
+                            <th>Pago: </th>
+                            <td>${{sale.pay}}</td>
+                        </tr>
+                        <tr>
+                            <th>Cambio: </th>
+                            <td>${{sale.change}}</td>
+                        </tr>
+                        {% elif sale.status == "pending" %}
+                        <tr>
+                            <th>{{sale.get_status_display}}</th>
+                        </tr>
+                        {% endif %}
                     </table>
                   </div>
                 </div>
@@ -113,7 +126,8 @@
               <!-- /.row -->
 
               <!-- this row will not appear when printing -->
-              <div class="row no-print">
+             {% if sale.status == "pending" %}
+             <div class="row no-print">
                 <div class="col-12">
                   <form action="." method="post">
                     {% csrf_token %}
@@ -136,6 +150,7 @@
                   </form>
                 </div>
               </div>
+             {% endif %}
             </div>
             <!-- /.invoice -->
           </div><!-- /.col -->
@@ -159,7 +174,7 @@
           });
       {% endfor %}
       $('#id_pay').on('input', function(){
-        var total = parseFloat({{total_cart}}) || 0;
+        var total = parseFloat({{sale.total}}) || 0;
         var pay = parseFloat($(this).val())|| 0;
         var change = pay - total;
         if(change>=0){

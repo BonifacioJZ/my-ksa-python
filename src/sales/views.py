@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, TemplateView,DetailView
+from django.views.generic import CreateView, TemplateView,DetailView,ListView,UpdateView
 from .forms import SaleForm,SearchProductForm
 from src.class_lib.Cart import Cart
 from .context_process import total_cart
@@ -76,7 +76,18 @@ class SalesCreateView(LoginRequiredMixin,CreateView):
             "date": datetime.now().strftime("%d-%m-%Y"),
         }
         return render(request,self.template_name,context)
-
+class SalesListView(LoginRequiredMixin,ListView):
+    template_name="sales/list.html"
+    model = SaleForm.Meta.model
+    context_object_name = "sales"
+    queryset = SaleForm.Meta.model.objects.all().order_by('-created_at')
+    
+    def get_context_data(self, **kwargs) -> dict[str, any]:
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Ventas"
+        context["date"] = datetime.now().strftime("%d-%m-%Y")
+        return context
+    
 class SaleDetailView(LoginRequiredMixin,DetailView):
     template_name="sales/show.html"
     model = SaleForm.Meta.model
@@ -105,6 +116,34 @@ class SaleDetailView(LoginRequiredMixin,DetailView):
         else:
             messages.error(request,"No se encontro la venta")
             return redirect(reverse_lazy('sales_index'))
+
+class SalesUpdateView(LoginRequiredMixin,UpdateView):
+    template_name="sales/edit.html"
+    model = SaleForm.Meta.model
+    form_class = SaleForm
+    context_object_name = "sale"
+    queryset = SaleForm.Meta.model.objects.prefetch_related().all()
+    success_url = reverse_lazy('sales_list')
+    
+    def get_context_data(self, **kwargs) -> dict[str, any]:
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Ventas"
+        context["subtitle"] ="Editar ventas"
+    
+    def get(self, request, folio=None, *args, **kwargs):
+        sale=SaleForm.Meta.model = self.get_queryset().prefetch_related().filter(folio=folio).first()
+        if sale:
+            context = {
+                "title": "Ventas",
+                "sale": sale,
+                "form": self.get_form(),
+                "date": datetime.now().strftime("%d-%m-%Y"),
+                "details": sale.sales.all(),
+                "client": sale.client,
+            }
+            return render(request,self.template_name,context) 
+        return super().get(request, *args, **kwargs)
+
 def generate_ticket(request:HttpRequest,folio=None):
     sale= SaleForm.Meta.model.objects.prefetch_related().filter(folio=folio).first()
     context = {

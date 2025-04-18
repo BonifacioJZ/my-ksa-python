@@ -506,7 +506,6 @@ class FoundProductsListView(ListView):
                 Q(sku__icontains=query)|
                 Q(bar_code__icontains=query)
             ).all()
-        print(benefits)
         if benefits:
             context={
                 "title":"Busqueda",
