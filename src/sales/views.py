@@ -130,8 +130,8 @@ class SalesUpdateView(LoginRequiredMixin,UpdateView):
         context["title"] = "Ventas"
         context["subtitle"] ="Editar ventas"
     
-    def get(self, request, folio=None, *args, **kwargs):
-        sale=SaleForm.Meta.model = self.get_queryset().prefetch_related().filter(folio=folio).first()
+    def get(self, request, pk=None, *args, **kwargs):
+        sale=self.get_queryset().prefetch_related().filter(id=pk).first()
         if sale:
             context = {
                 "title": "Ventas",
@@ -143,6 +143,31 @@ class SalesUpdateView(LoginRequiredMixin,UpdateView):
             }
             return render(request,self.template_name,context) 
         return super().get(request, *args, **kwargs)
+    
+    def post(self, request,pk=None, *args, **kwargs):
+        sale = SaleForm.Meta.model.objects.filter(id=pk).first()
+        if sale:
+            form = SaleForm(request.POST)
+            if form.is_valid():
+                sale.client = form.cleaned_data['client']
+                sale.status = form.cleaned_data['status']
+                sale.pay = form.cleaned_data['pay']
+                sale.change = form.cleaned_data['change']
+                sale.save()
+                messages.success(request,"Venta actualizada correctamente")
+                return redirect(self.success_url)
+            else:
+                messages.error(request,f"Error al actualizar la venta {form.errors}")
+                context = {
+                "title": "Ventas",
+                "sale": sale,
+                "form": self.get_form(),
+                "date": datetime.now().strftime("%d-%m-%Y"),
+                "details": sale.sales.all(),
+                "client": sale.client,
+            }
+            return render(request,self.template_name,context) 
+        return super().post(request, *args, **kwargs)
 
 def generate_ticket(request:HttpRequest,folio=None):
     sale= SaleForm.Meta.model.objects.prefetch_related().filter(folio=folio).first()
