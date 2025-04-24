@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from core import db
 import os
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy # type: ignore
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,6 +47,7 @@ LOCAL_APPS=[
     'src.suppliers',
     'src.clients',
     'src.sales',
+    'src.sales_return',
 ]
 THIRTY_PARTY =[
     "crispy_forms",

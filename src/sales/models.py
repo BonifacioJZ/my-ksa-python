@@ -32,7 +32,7 @@ class Sale(models.Model):
         verbose_name_plural = 'sales'
     
     def __str__(self) -> str:
-        return self.client.name
+        return f"{self.client.name} - {self.client.last_name} - {self.folio}"
     
     def save(self, *args, **kwargs):
         if not self.folio:
@@ -57,4 +57,4 @@ class Detail(models.Model):
         verbose_name_plural = 'details'
     
     def __str__(self) -> str:
-        return f"{self.product.name} - {self.product.product.name}"
+        return f"{self.product.name} - {self.product.product.name} - {self.sale.folio}"
