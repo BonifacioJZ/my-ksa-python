@@ -47,6 +47,7 @@ LOCAL_APPS=[
     'src.suppliers',
     'src.clients',
     'src.sales',
+    'src.sales_return'
     
 ]
 THIRTY_PARTY =[
