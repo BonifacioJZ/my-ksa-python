@@ -48,6 +48,7 @@ class Detail(models.Model):
     quantity = models.PositiveIntegerField(verbose_name="Cantidad",blank=False,null=False)
     price = models.DecimalField(verbose_name="Precio",max_digits=10,decimal_places=2)
     total = models.DecimalField(verbose_name="Total",max_digits=10,decimal_places=2)
+    cancel = models.BooleanField(default=False) 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
