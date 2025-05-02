@@ -19,9 +19,10 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from src.products.urls import urlpatterns_benefit as benefit_urls
+from src.sales.views import SalesIndexView
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('src.home.urls')),
+    path('',SalesIndexView.as_view(),name='index'),
     path('authentication/',include('src.user.urls')),
     path('category/',include('src.category.urls')),
     path('product/',include('src.products.urls')),
@@ -30,5 +31,6 @@ urlpatterns = [
     path('supplier/',include('src.suppliers.urls')),
     path('clients/',include('src.clients.urls')),
     path('sales/',include('src.sales.urls')),
+    path('sales_return/',include('src.sales_return.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

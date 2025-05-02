@@ -212,9 +212,9 @@ def add_one_product(request:HttpRequest,pk:str):
     success = cart.add(product,1)
     if not success:
         messages.error(request,"No hay suficiente stock")
-        return redirect(reverse_lazy('sales_index'))
+        return redirect(reverse_lazy('index'))
     messages.success(request,"Producto agregado al carrito")
-    return redirect(reverse_lazy('sales_index'))
+    return redirect(reverse_lazy('index'))
 
 def subtract_one_product(request:HttpRequest,pk:str):
     cart = Cart(request)
@@ -222,9 +222,9 @@ def subtract_one_product(request:HttpRequest,pk:str):
     success = cart.subtract(product,1)
     if not success:
         messages.error(request,"No se encuentra el producto en el carrito")
-        return redirect('sales_index')
+        return redirect('index')
     messages.success(request,"Se eliminado un elemento  del carrito")
-    return redirect('sales_index')
+    return redirect('index')
     
 
 def remove_product(request:HttpRequest,pk:str):
@@ -232,5 +232,5 @@ def remove_product(request:HttpRequest,pk:str):
     product = Benefit.objects.select_related().filter(id=pk).first()
     cart.remove(product)
     messages.success(request,"Producto eliminado del carrito")
-    return redirect('sales_index')
+    return redirect('index')
     

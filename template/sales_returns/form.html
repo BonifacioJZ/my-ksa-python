@@ -1,0 +1,97 @@
+{% extends '../layout/_layout.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    
+    {% if title %}
+        {{title}}
+    {% else %}
+        App
+    {% endif %}
+        
+{% endblock title %}
+
+
+{% block content %}
+{% if messages %}
+<div class="m-0 row justify-content-center align-items-center">
+    <div class="col-auto p-1 text-center">
+        {% include '../components/_alert.html' %}
+    </div>
+</div>
+{% endif %}
+<div class="row">
+    <div class="col-11">
+        <div class="card card-default">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-plus"></i>
+                    {{title}}
+                </div>
+            </div>
+            <div class="card-body">
+                <form id="form" action="." method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group" >
+                        <label for="penalizacion">Penalizacion (%)</label>
+                        <input type="number" class="form-control" id="penality"  step="0.01" value="0">
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Vendido</th>
+                                    <th>Devolver</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                {% for item in items  %}
+                                    <tr>
+                                        <td>{{item.product.product.name}} - {{item.product.name}}</td>
+                                        <td>{{item.quantity}}</td>
+                                        <td>
+                                            <input type="number" name="dev_{{item.id}}" class="form-control" id="dev_{{item.id}}" value="{{item.quantity}}" min="0" max="{{item.quantity}}">
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                    
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden">
+                        <input type="submit" value="Procesar Devolucion" class="btn btn-primary">
+                        <a href="{% url 'sales_index'%}" class="btn">Regresar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock  %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            {% for message in messages %}
+                Swal.fire({
+                    icon: "{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
+                    title: "{% if message.tags == 'success' %}¡Éxito!{% elif message.tags == 'error' %}¡Error!{% elif message.tags == 'warning' %}¡Advertencia!{% else %}Información{% endif %}",
+                    text: "{{ message }}",
+                    confirmButtonText: "Aceptar"
+                });
+            {% endfor %}
+            tinymce.init({
+                selector: 'textarea',  // Activa TinyMCE en todos los <textarea>
+                menubar: false,
+                plugins: "advlist autolink lists link image charmap print preview",
+                toolbar: "bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
+                height: 300
+            });
+        
+        });
+    </script>
+{% endblock  %}
