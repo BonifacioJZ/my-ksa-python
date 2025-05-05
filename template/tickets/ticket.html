@@ -4,12 +4,16 @@
   <meta charset="UTF-8">
   <style>
     @page {
-      size: 80mm auto;
-      margin: 5mm;
+      size: 2in auto;
+      margin: 0;
     }
     body {
+      width: 220px; /* Aproximadamente 58 mm */
       font-family: monospace;
-      font-size: 10px;
+      font-size: 12px;
+      margin: 0 auto;
+      font-weight: bold;
+      text-align: center;
     }
     .header {
       text-align: center;
@@ -33,18 +37,51 @@
     }
     .totales {
       margin-top: 10px;
-      text-align: right;
+      text-align: center;
       font-weight: bold;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 2px 4px;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    th {
+      border-bottom: 1px solid #000;
+      font-weight: bold;
+    }
+
+    td.total {
+      text-align: right;
     }
     .footer {
       text-align: center;
       margin-top: 10px;
       font-size: 9px;
     }
+    .ticket {
+      padding: 5px;
+    }
+    @media print {
+      @page {
+        size: auto;
+        margin: 0;
+      }
+      body {
+        margin: 0;
+      }
+    }
   </style>
 </head>
 <body>
 
+ <div class="ticket"> 
   <div class="header">
     <div class="logo">
       <img src="{{ logo_path }}">
@@ -67,10 +104,11 @@
     <tbody>
       {% for item in cart %}
       <tr>
-        <td> {{item.product.name}} {{item.product.product.name}}</td>
+        <td> {{item.product.name}} 
+          <br>{{item.product.product.name}}</td>
         <td>{{item.quantity }}</td>
         <td>${{ item.price }}</td>
-        <td>${{ item.total }}</td>
+        <td class="total">${{ item.total }}</td>
       </tr>
       {% endfor %}
     </tbody>
@@ -89,6 +127,7 @@
   <div class="footer">
     ¡Gracias por su compra!
   </div>
+ </div>
 
 </body>
 </html>
